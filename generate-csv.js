@@ -246,6 +246,17 @@ function generateSummaryCSV(stakeDaoData, curveData, poolName) {
 				0,
 			) / priceDiffs.length,
 		),
+		stdDevPriceDiffPercent: Math.sqrt(
+			priceDiffPercents.reduce(
+				(sq, n) =>
+					sq +
+					(n -
+						priceDiffPercents.reduce((a, b) => a + b, 0) /
+							priceDiffPercents.length) **
+						2,
+				0,
+			) / priceDiffPercents.length,
+		),
 		correlation: correlation,
 		stakeDaoVolatility: stakeDaoVolatility,
 		curveVolatility: curveVolatility,
@@ -261,8 +272,8 @@ function generateSummaryCSV(stakeDaoData, curveData, poolName) {
 
 	// Generate summary CSV with expanded metrics
 	let summaryCsv =
-		"pool,total_data_points,avg_price_diff,avg_price_diff_percent,max_price_diff,min_price_diff,max_price_diff_percent,min_price_diff_percent,std_dev_price_diff,correlation,stakeDao_volatility,curve_volatility,tracking_error,max_drawdown,information_ratio,stakeDao_sharpe,median_absolute_deviation,stakeDao_higher_percent,stakeDao_lower_percent,stakeDao_equal_percent\n";
-	summaryCsv += `${stats.pool},${stats.totalDataPoints},${stats.avgPriceDiff.toFixed(6)},${stats.avgPriceDiffPercent.toFixed(4)},${stats.maxPriceDiff.toFixed(6)},${stats.minPriceDiff.toFixed(6)},${stats.maxPriceDiffPercent.toFixed(4)},${stats.minPriceDiffPercent.toFixed(4)},${stats.stdDevPriceDiff.toFixed(6)},${stats.correlation.toFixed(6)},${stats.stakeDaoVolatility.toFixed(6)},${stats.curveVolatility.toFixed(6)},${stats.trackingError.toFixed(6)},${stats.maxDrawdown.toFixed(6)},${stats.informationRatio.toFixed(6)},${stats.stakeDaoSharpe.toFixed(6)},${stats.medianAbsoluteDeviation.toFixed(6)},${stats.stakeDaoHigherPercent.toFixed(2)},${stats.stakeDaoLowerPercent.toFixed(2)},${stats.stakeDaoEqualPercent.toFixed(2)}\n`;
+		"pool,total_data_points,avg_price_diff,avg_price_diff_percent,max_price_diff,min_price_diff,max_price_diff_percent,min_price_diff_percent,std_dev_price_diff,std_dev_price_diff_percent,correlation,stakeDao_volatility,curve_volatility,tracking_error,max_drawdown,information_ratio,stakeDao_sharpe,median_absolute_deviation,stakeDao_higher_percent,stakeDao_lower_percent,stakeDao_equal_percent\n";
+	summaryCsv += `${stats.pool},${stats.totalDataPoints},${stats.avgPriceDiff.toFixed(6)},${stats.avgPriceDiffPercent.toFixed(4)},${stats.maxPriceDiff.toFixed(6)},${stats.minPriceDiff.toFixed(6)},${stats.maxPriceDiffPercent.toFixed(4)},${stats.minPriceDiffPercent.toFixed(4)},${stats.stdDevPriceDiff.toFixed(6)},${stats.stdDevPriceDiffPercent.toFixed(4)},${stats.correlation.toFixed(6)},${stats.stakeDaoVolatility.toFixed(6)},${stats.curveVolatility.toFixed(6)},${stats.trackingError.toFixed(6)},${stats.maxDrawdown.toFixed(6)},${stats.informationRatio.toFixed(6)},${stats.stakeDaoSharpe.toFixed(6)},${stats.medianAbsoluteDeviation.toFixed(6)},${stats.stakeDaoHigherPercent.toFixed(2)},${stats.stakeDaoLowerPercent.toFixed(2)},${stats.stakeDaoEqualPercent.toFixed(2)}\n`;
 
 	// Ensure directory exists
 	const dir = "assets/csv";

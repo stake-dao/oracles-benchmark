@@ -1,0 +1,2 @@
+pool,total_data_points,avg_price_diff,avg_price_diff_percent,max_price_diff,min_price_diff,max_price_diff_percent,min_price_diff_percent,std_dev_price_diff,correlation,stakeDao_volatility,curve_volatility,tracking_error,max_drawdown,information_ratio,stakeDao_sharpe,median_absolute_deviation,stakeDao_higher_percent,stakeDao_lower_percent,stakeDao_equal_percent
+cbBTCwBTC,726,247.968370,0.2410,2089.080291,-238.503802,1.9831,-0.1964,443.194266,0.999117,1.373635,1.443098,507.847880,0.108068,0.488273,0.000434,315.253231,50.14,49.31,0.55

@@ -1,4 +1,5 @@
 const fs = require("node:fs");
+const path = require("node:path");
 
 function loadOracleData(filePath) {
 	const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -10,12 +11,12 @@ function loadOracleData(filePath) {
 		}));
 }
 
-function generateChartHTML(stakeDaoData, curveData, poolName) {
+function generateChartHTML(stakeDaoData, curveData, poolName, poolType) {
 	const html = `
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Oracle Comparison - ${poolName}</title>
+    <title>Oracle Comparison - ${poolName} (${poolType})</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
@@ -64,7 +65,7 @@ function generateChartHTML(stakeDaoData, curveData, poolName) {
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Oracle Price Comparison - ${poolName}'
+                        text: 'Oracle Price Comparison - ${poolName} (${poolType})'
                     },
                     zoom: {
                         pan: {
@@ -95,22 +96,83 @@ function generateChartHTML(stakeDaoData, curveData, poolName) {
 </body>
 </html>`;
 
-	fs.writeFileSync(
-		`assets/charts/oracle-comparison-${poolName.replace("/", "")}.html`,
-		html,
+	// Create filename with pool type prefix to avoid conflicts
+	const filename = `oracle-comparison-${poolType}-${poolName.replace(/[\/\\]/g, "")}.html`;
+	fs.writeFileSync(`assets/charts/${filename}`, html);
+}
+
+function discoverPools(poolType) {
+	const poolTypePath = path.join("data", poolType);
+
+	// Check if directory exists
+	if (!fs.existsSync(poolTypePath)) {
+		console.log(`Directory ${poolTypePath} does not exist, skipping...`);
+		return [];
+	}
+
+	// Get all subdirectories (pools)
+	const poolDirs = fs
+		.readdirSync(poolTypePath, { withFileTypes: true })
+		.filter((dirent) => dirent.isDirectory())
+		.map((dirent) => dirent.name);
+
+	console.log(
+		`Found ${poolDirs.length} pools in ${poolType}: ${poolDirs.join(", ")}`,
 	);
+	return poolDirs;
+}
+
+function processPool(poolName, poolType) {
+	const poolPath = path.join("data", poolType, poolName);
+
+	// Define file paths based on pool type
+	const curveFile = path.join(poolPath, `curve-${poolType}.json`);
+	const sdFile = path.join(poolPath, `sd-${poolType}.json`);
+
+	// Check if both files exist
+	if (!fs.existsSync(curveFile)) {
+		console.log(
+			`Warning: ${curveFile} does not exist, skipping pool ${poolName}`,
+		);
+		return;
+	}
+
+	if (!fs.existsSync(sdFile)) {
+		console.log(`Warning: ${sdFile} does not exist, skipping pool ${poolName}`);
+		return;
+	}
+
+	try {
+		const stakeDaoData = loadOracleData(sdFile);
+		const curveData = loadOracleData(curveFile);
+
+		generateChartHTML(stakeDaoData, curveData, poolName, poolType);
+		console.log(`Generated chart for ${poolName} (${poolType})`);
+	} catch (error) {
+		console.error(
+			`Error processing pool ${poolName} (${poolType}):`,
+			error.message,
+		);
+	}
 }
 
 (function main() {
-	const pools = ["cbBTCwBTC", "ETHstETH", "USDCUSDT"];
+	const poolTypes = ["cryptoswap", "stableswap"];
 
-	for (const pool of pools) {
-		const stakeDaoData = loadOracleData(
-			`data/stableswap/${pool}/sd-stable.json`,
-		);
-		const curveData = loadOracleData(
-			`data/stableswap/${pool}/curve-stable.json`,
-		);
-		generateChartHTML(stakeDaoData, curveData, pool);
+	// Ensure assets/charts directory exists
+	const chartsDir = "assets/charts";
+	if (!fs.existsSync(chartsDir)) {
+		fs.mkdirSync(chartsDir, { recursive: true });
 	}
+
+	for (const poolType of poolTypes) {
+		console.log(`\nProcessing ${poolType} pools...`);
+		const pools = discoverPools(poolType);
+
+		for (const pool of pools) {
+			processPool(pool, poolType);
+		}
+	}
+
+	console.log("\nChart generation completed!");
 })();

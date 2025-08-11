@@ -1,0 +1,10 @@
+{
+	"name": "oracles-benchmark",
+	"version": "1.0.0",
+	"description": "Minimalistic benchmark for Curve oracles.",
+	"scripts": {
+		"generate-assets": "node generate-charts.js && node generate-csv.js && node generate-comparison-table.js"
+	},
+	"author": "",
+	"license": "ISC"
+}

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.28;
 
-import {BaseSnapshot} from "test/BaseSnapshot.sol";
+import {StableSnapshot} from "test/StableSnapshot.sol";
 
-contract Snapshot_ETHstETH is BaseSnapshot {
-    constructor() BaseSnapshot() {
+contract Snapshot_ETHstETH is StableSnapshot {
+    constructor() StableSnapshot() {
         config.network = "mainnet";
         config.curvePool = 0x21E27a5E5513D6e65C4f830167390997aA84843a; // ETH/stETH
         config.directory = "stableswap/ETHstETH";

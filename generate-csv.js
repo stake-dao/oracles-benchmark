@@ -4,7 +4,7 @@
  * This script generates CSV files comparing StakeDAO and Curve oracle implementations
  * for various Curve pools. It produces two types of files:
  *
- * 1. Detailed Comparison CSV (oracle-comparison-{pool}.csv):
+ * 1. Detailed Comparison CSV (oracle-comparison-{poolType}-{pool}.csv):
  *    - timestamp: ISO timestamp of the measurement
  *    - block_number: Ethereum block number
  *    - stakeDao_price: Price from StakeDAO oracle (LP/Loan at 1e18 scale)
@@ -12,7 +12,7 @@
  *    - price_difference: Absolute difference (Curve - StakeDAO)
  *    - price_difference_percent: Percentage difference ((Curve - StakeDAO) / StakeDAO * 100)
  *
- * 2. Statistical Summary CSV (oracle-summary-{pool}.csv):
+ * 2. Statistical Summary CSV (oracle-summary-{poolType}-{pool}.csv):
  *    - pool: Pool name (e.g., cbBTCwBTC, ETHstETH, USDCUSDT)
  *    - total_data_points: Number of data points compared
  *
@@ -53,6 +53,7 @@
  */
 
 const fs = require("node:fs");
+const path = require("node:path");
 
 function loadOracleData(filePath) {
 	const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -65,7 +66,7 @@ function loadOracleData(filePath) {
 		}));
 }
 
-function generateCSV(stakeDaoData, curveData, poolName) {
+function generateCSV(stakeDaoData, curveData, poolName, poolType) {
 	// Create a map for easy lookup by timestamp
 	const curveMap = new Map(curveData.map((d) => [d.timestamp, d.price]));
 
@@ -89,13 +90,15 @@ function generateCSV(stakeDaoData, curveData, poolName) {
 		fs.mkdirSync(dir, { recursive: true });
 	}
 
-	fs.writeFileSync(`${dir}/oracle-comparison-${poolName}.csv`, csv);
+	// Create filename with pool type prefix to avoid conflicts
+	const filename = `oracle-comparison-${poolType}-${poolName.replace(/[\/\\]/g, "")}.csv`;
+	fs.writeFileSync(`${dir}/${filename}`, csv);
 	console.log(
-		`Generated CSV for ${poolName}: ${stakeDaoData.length} data points`,
+		`Generated CSV for ${poolName} (${poolType}): ${stakeDaoData.length} data points`,
 	);
 }
 
-function generateSummaryCSV(stakeDaoData, curveData, poolName) {
+function generateSummaryCSV(stakeDaoData, curveData, poolName, poolType) {
 	// Calculate statistics
 	const curveMap = new Map(curveData.map((d) => [d.timestamp, d.price]));
 	const comparisons = stakeDaoData
@@ -117,7 +120,7 @@ function generateSummaryCSV(stakeDaoData, curveData, poolName) {
 		.filter((c) => c !== null);
 
 	if (comparisons.length === 0) {
-		console.log(`No matching data points for ${poolName}`);
+		console.log(`No matching data points for ${poolName} (${poolType})`);
 		return;
 	}
 
@@ -230,6 +233,7 @@ function generateSummaryCSV(stakeDaoData, curveData, poolName) {
 
 	const stats = {
 		pool: poolName,
+		poolType: poolType,
 		totalDataPoints: comparisons.length,
 		avgPriceDiff: priceDiffs.reduce((a, b) => a + b, 0) / priceDiffs.length,
 		avgPriceDiffPercent:
@@ -272,8 +276,8 @@ function generateSummaryCSV(stakeDaoData, curveData, poolName) {
 
 	// Generate summary CSV with expanded metrics
 	let summaryCsv =
-		"pool,total_data_points,avg_price_diff,avg_price_diff_percent,max_price_diff,min_price_diff,max_price_diff_percent,min_price_diff_percent,std_dev_price_diff,std_dev_price_diff_percent,correlation,stakeDao_volatility,curve_volatility,tracking_error,max_drawdown,information_ratio,stakeDao_sharpe,median_absolute_deviation,stakeDao_higher_percent,stakeDao_lower_percent,stakeDao_equal_percent\n";
-	summaryCsv += `${stats.pool},${stats.totalDataPoints},${stats.avgPriceDiff.toFixed(6)},${stats.avgPriceDiffPercent.toFixed(4)},${stats.maxPriceDiff.toFixed(6)},${stats.minPriceDiff.toFixed(6)},${stats.maxPriceDiffPercent.toFixed(4)},${stats.minPriceDiffPercent.toFixed(4)},${stats.stdDevPriceDiff.toFixed(6)},${stats.stdDevPriceDiffPercent.toFixed(4)},${stats.correlation.toFixed(6)},${stats.stakeDaoVolatility.toFixed(6)},${stats.curveVolatility.toFixed(6)},${stats.trackingError.toFixed(6)},${stats.maxDrawdown.toFixed(6)},${stats.informationRatio.toFixed(6)},${stats.stakeDaoSharpe.toFixed(6)},${stats.medianAbsoluteDeviation.toFixed(6)},${stats.stakeDaoHigherPercent.toFixed(2)},${stats.stakeDaoLowerPercent.toFixed(2)},${stats.stakeDaoEqualPercent.toFixed(2)}\n`;
+		"pool,pool_type,total_data_points,avg_price_diff,avg_price_diff_percent,max_price_diff,min_price_diff,max_price_diff_percent,min_price_diff_percent,std_dev_price_diff,std_dev_price_diff_percent,correlation,stakeDao_volatility,curve_volatility,tracking_error,max_drawdown,information_ratio,stakeDao_sharpe,median_absolute_deviation,stakeDao_higher_percent,stakeDao_lower_percent,stakeDao_equal_percent\n";
+	summaryCsv += `${stats.pool},${stats.poolType},${stats.totalDataPoints},${stats.avgPriceDiff.toFixed(6)},${stats.avgPriceDiffPercent.toFixed(4)},${stats.maxPriceDiff.toFixed(6)},${stats.minPriceDiff.toFixed(6)},${stats.maxPriceDiffPercent.toFixed(4)},${stats.minPriceDiffPercent.toFixed(4)},${stats.stdDevPriceDiff.toFixed(6)},${stats.stdDevPriceDiffPercent.toFixed(4)},${stats.correlation.toFixed(6)},${stats.stakeDaoVolatility.toFixed(6)},${stats.curveVolatility.toFixed(6)},${stats.trackingError.toFixed(6)},${stats.maxDrawdown.toFixed(6)},${stats.informationRatio.toFixed(6)},${stats.stakeDaoSharpe.toFixed(6)},${stats.medianAbsoluteDeviation.toFixed(6)},${stats.stakeDaoHigherPercent.toFixed(2)},${stats.stakeDaoLowerPercent.toFixed(2)},${stats.stakeDaoEqualPercent.toFixed(2)}\n`;
 
 	// Ensure directory exists
 	const dir = "assets/csv";
@@ -281,30 +285,89 @@ function generateSummaryCSV(stakeDaoData, curveData, poolName) {
 		fs.mkdirSync(dir, { recursive: true });
 	}
 
-	fs.writeFileSync(`${dir}/oracle-summary-${poolName}.csv`, summaryCsv);
-	console.log(`Generated summary CSV for ${poolName}`);
+	// Create filename with pool type prefix to avoid conflicts
+	const filename = `oracle-summary-${poolType}-${poolName.replace(/[\/\\]/g, "")}.csv`;
+	fs.writeFileSync(`${dir}/${filename}`, summaryCsv);
+	console.log(`Generated summary CSV for ${poolName} (${poolType})`);
+}
+
+function discoverPools(poolType) {
+	const poolTypePath = path.join("data", poolType);
+
+	// Check if directory exists
+	if (!fs.existsSync(poolTypePath)) {
+		console.log(`Directory ${poolTypePath} does not exist, skipping...`);
+		return [];
+	}
+
+	// Get all subdirectories (pools)
+	const poolDirs = fs
+		.readdirSync(poolTypePath, { withFileTypes: true })
+		.filter((dirent) => dirent.isDirectory())
+		.map((dirent) => dirent.name);
+
+	console.log(
+		`Found ${poolDirs.length} pools in ${poolType}: ${poolDirs.join(", ")}`,
+	);
+	return poolDirs;
+}
+
+function processPool(poolName, poolType) {
+	const poolPath = path.join("data", poolType, poolName);
+
+	// Define file paths based on pool type
+	const curveFile = path.join(poolPath, `curve-${poolType}.json`);
+	const sdFile = path.join(poolPath, `sd-${poolType}.json`);
+
+	// Check if both files exist
+	if (!fs.existsSync(curveFile)) {
+		console.log(
+			`Warning: ${curveFile} does not exist, skipping pool ${poolName}`,
+		);
+		return;
+	}
+
+	if (!fs.existsSync(sdFile)) {
+		console.log(`Warning: ${sdFile} does not exist, skipping pool ${poolName}`);
+		return;
+	}
+
+	try {
+		const stakeDaoData = loadOracleData(sdFile);
+		const curveData = loadOracleData(curveFile);
+
+		generateCSV(stakeDaoData, curveData, poolName, poolType);
+		generateSummaryCSV(stakeDaoData, curveData, poolName, poolType);
+		console.log(`Generated CSV files for ${poolName} (${poolType})`);
+	} catch (error) {
+		console.error(
+			`Error processing pool ${poolName} (${poolType}):`,
+			error.message,
+		);
+	}
 }
 
 (function main() {
-	const pools = ["cbBTCwBTC", "ETHstETH", "USDCUSDT"];
+	const poolTypes = ["cryptoswap", "stableswap"];
 
-	for (const pool of pools) {
-		try {
-			const stakeDaoData = loadOracleData(
-				`data/stableswap/${pool}/sd-stable.json`,
-			);
-			const curveData = loadOracleData(
-				`data/stableswap/${pool}/curve-stable.json`,
-			);
+	// Ensure assets/csv directory exists
+	const csvDir = "assets/csv";
+	if (!fs.existsSync(csvDir)) {
+		fs.mkdirSync(csvDir, { recursive: true });
+	}
 
-			generateCSV(stakeDaoData, curveData, pool);
-			generateSummaryCSV(stakeDaoData, curveData, pool);
-		} catch (error) {
-			console.error(`Error processing ${pool}:`, error.message);
+	for (const poolType of poolTypes) {
+		console.log(`\nProcessing ${poolType} pools...`);
+		const pools = discoverPools(poolType);
+
+		for (const pool of pools) {
+			processPool(pool, poolType);
 		}
 	}
 
 	console.log("\nCSV files generated in assets/csv/");
-	console.log("- oracle-comparison-{pool}.csv: Detailed comparison data");
-	console.log("- oracle-summary-{pool}.csv: Statistical summary");
+	console.log(
+		"- oracle-comparison-{poolType}-{pool}.csv: Detailed comparison data",
+	);
+	console.log("- oracle-summary-{poolType}-{pool}.csv: Statistical summary");
 })();

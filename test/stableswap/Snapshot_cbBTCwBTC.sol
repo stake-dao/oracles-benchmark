@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.28;
 
-import {BaseSnapshot, IFeed} from "test/BaseSnapshot.sol";
+import {StableSnapshot, IFeed} from "test/StableSnapshot.sol";
 import {Math} from "openzeppelin-contracts/contracts/utils/math/Math.sol";
 
-contract Snapshot_cbBTCwBTC is BaseSnapshot {
-    constructor() BaseSnapshot() {
+contract Snapshot_cbBTCwBTC is StableSnapshot {
+    constructor() StableSnapshot() {
         config.network = "mainnet";
         config.curvePool = 0x839d6bDeDFF886404A6d7a788ef241e4e28F4802; // cbBTC/wBTC
         config.directory = "stableswap/cbBTCwBTC";

@@ -1,0 +1,2 @@
+pool,pool_type,total_data_points,avg_price_diff,avg_price_diff_percent,max_price_diff,min_price_diff,max_price_diff_percent,min_price_diff_percent,std_dev_price_diff,std_dev_price_diff_percent,correlation,stakeDao_volatility,curve_volatility,tracking_error,max_drawdown,information_ratio,stakeDao_sharpe,median_absolute_deviation,stakeDao_higher_percent,stakeDao_lower_percent,stakeDao_equal_percent
+ETHstETH,stableswap,723,2.638704,0.0990,28.903434,-15.392911,0.9947,-0.3943,6.164099,0.2179,0.999961,2.817048,2.834783,6.705138,0.236539,0.393535,0.000512,4.238029,47.16,52.84,0.00

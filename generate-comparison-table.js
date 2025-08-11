@@ -1,18 +1,19 @@
 /**
  * Oracle Comparison Table Generator
  *
- * Generates a single comparison table where:
+ * Generates comparison tables for both cryptoswap and stableswap pools where:
  * - Rows = Metrics
- * - Columns = Pools (cbBTCwBTC, ETHstETH, USDCUSDT)
+ * - Columns = Pools (dynamically discovered)
  *
  * This format makes it easier to compare the same metric across different pools
  * and avoids horizontal scrolling issues.
  */
 
 const fs = require("node:fs");
+const path = require("node:path");
 
-function loadSummaryData(poolName) {
-	const filePath = `assets/csv/oracle-summary-${poolName}.csv`;
+function loadSummaryData(poolName, poolType) {
+	const filePath = `assets/csv/oracle-summary-${poolType}-${poolName}.csv`;
 	const data = fs.readFileSync(filePath, "utf8");
 	const lines = data.split("\n");
 	const headers = lines[0].split(",");
@@ -26,16 +27,46 @@ function loadSummaryData(poolName) {
 	return result;
 }
 
-function generateComparisonTable() {
-	const pools = ["cbBTCwBTC", "ETHstETH", "USDCUSDT"];
+function discoverPools(poolType) {
+	const poolTypePath = path.join("data", poolType);
+
+	// Check if directory exists
+	if (!fs.existsSync(poolTypePath)) {
+		console.log(`Directory ${poolTypePath} does not exist, skipping...`);
+		return [];
+	}
+
+	// Get all subdirectories (pools)
+	const poolDirs = fs
+		.readdirSync(poolTypePath, { withFileTypes: true })
+		.filter((dirent) => dirent.isDirectory())
+		.map((dirent) => dirent.name);
+
+	console.log(
+		`Found ${poolDirs.length} pools in ${poolType}: ${poolDirs.join(", ")}`,
+	);
+	return poolDirs;
+}
+
+function generateComparisonTable(poolType) {
+	const pools = discoverPools(poolType);
+
+	if (pools.length === 0) {
+		console.log(`No pools found for ${poolType}, skipping...`);
+		return;
+	}
+
 	const poolData = {};
 
 	// Load data for each pool
 	for (const pool of pools) {
 		try {
-			poolData[pool] = loadSummaryData(pool);
+			poolData[pool] = loadSummaryData(pool, poolType);
 		} catch (error) {
-			console.error(`Error loading data for ${pool}:`, error.message);
+			console.error(
+				`Error loading data for ${pool} (${poolType}):`,
+				error.message,
+			);
 			poolData[pool] = {};
 		}
 	}
@@ -105,9 +136,21 @@ function generateComparisonTable() {
 	];
 
 	// Generate markdown table
-	let markdown = "# Oracle Comparison Summary\n\n";
-	markdown += "| Metric | cbBTC/wBTC | ETH/stETH | USDC/USDT |\n";
-	markdown += "|--------|------------|-----------|-----------|\n";
+	let markdown = `# Oracle Comparison Summary - ${poolType.charAt(0).toUpperCase() + poolType.slice(1)} Pools\n\n`;
+
+	// Create header row with pool names
+	const headerRow = ["Metric"];
+	for (const pool of pools) {
+		headerRow.push(pool);
+	}
+	markdown += `| ${headerRow.join(" | ")} |\n`;
+
+	// Create separator row
+	const separatorRow = ["--------"];
+	for (const pool of pools) {
+		separatorRow.push("-".repeat(pool.length));
+	}
+	markdown += `| ${separatorRow.join(" | ")} |\n`;
 
 	for (const metric of metrics) {
 		const row = [metric.name];
@@ -195,11 +238,12 @@ function generateComparisonTable() {
 	markdown += `- **Most Balanced**: ${mostBalanced.pool} (${mostBalanced.balance.toFixed(2)}% difference)\n`;
 
 	// Save to file
-	fs.writeFileSync("assets/comparison-table.md", markdown);
-	console.log("Generated comparison table: assets/comparison-table.md");
+	const filename = `comparison-table-${poolType}.md`;
+	fs.writeFileSync(`assets/${filename}`, markdown);
+	console.log(`Generated comparison table: assets/${filename}`);
 
 	// Also generate CSV version
-	let csv = "metric,cbBTCwBTC,ETHstETH,USDCUSDT\n";
+	let csv = `metric,${pools.join(",")}\n`;
 	for (const metric of metrics) {
 		const row = [metric.name];
 		for (const pool of pools) {
@@ -208,11 +252,134 @@ function generateComparisonTable() {
 		}
 		csv += `${row.join(",")}\n`;
 	}
-	fs.writeFileSync("assets/csv/oracle-comparison-table.csv", csv);
+
+	// Ensure assets/csv directory exists
+	const csvDir = "assets/csv";
+	if (!fs.existsSync(csvDir)) {
+		fs.mkdirSync(csvDir, { recursive: true });
+	}
+
+	const csvFilename = `oracle-comparison-table-${poolType}.csv`;
+	fs.writeFileSync(`${csvDir}/${csvFilename}`, csv);
+	console.log(`Generated comparison CSV: assets/csv/${csvFilename}`);
+}
+
+function generateCombinedTable() {
+	const poolTypes = ["cryptoswap", "stableswap"];
+	const allPoolData = {};
+
+	// Collect all pools and their data
+	for (const poolType of poolTypes) {
+		const pools = discoverPools(poolType);
+		for (const pool of pools) {
+			try {
+				allPoolData[`${poolType}-${pool}`] = loadSummaryData(pool, poolType);
+			} catch (error) {
+				console.error(
+					`Error loading data for ${pool} (${poolType}):`,
+					error.message,
+				);
+			}
+		}
+	}
+
+	const allPools = Object.keys(allPoolData);
+	if (allPools.length === 0) {
+		console.log("No pool data found, skipping combined table...");
+		return;
+	}
+
+	// Define key metrics for combined table
+	const keyMetrics = [
+		{ key: "correlation", name: "Correlation", format: "decimal" },
+		{
+			key: "avg_price_diff_percent",
+			name: "Avg Price Diff (%)",
+			format: "decimal",
+		},
+		{ key: "tracking_error", name: "Tracking Error", format: "decimal" },
+		{
+			key: "stakeDao_volatility",
+			name: "StakeDAO Volatility (%)",
+			format: "percentage",
+		},
+		{
+			key: "stakeDao_higher_percent",
+			name: "StakeDAO Higher (%)",
+			format: "percentage",
+		},
+	];
+
+	// Generate combined markdown table
+	let markdown = "# Oracle Comparison Summary - All Pools\n\n";
+
+	// Create header row
+	const headerRow = ["Metric"];
+	for (const pool of allPools) {
+		headerRow.push(pool);
+	}
+	markdown += `| ${headerRow.join(" | ")} |\n`;
+
+	// Create separator row
+	const separatorRow = ["--------"];
+	for (const pool of allPools) {
+		separatorRow.push("-".repeat(pool.length));
+	}
+	markdown += `| ${separatorRow.join(" | ")} |\n`;
+
+	for (const metric of keyMetrics) {
+		const row = [metric.name];
+
+		for (const pool of allPools) {
+			const value = allPoolData[pool][metric.key];
+			if (value !== undefined) {
+				const numValue = Number.parseFloat(value);
+				let formattedValue;
+
+				switch (metric.format) {
+					case "percentage":
+						if (metric.key.includes("percent") && numValue <= 100) {
+							formattedValue = `${numValue.toFixed(2)}%`;
+						} else {
+							formattedValue = `${(numValue * 100).toFixed(2)}%`;
+						}
+						break;
+					case "decimal":
+						formattedValue = numValue.toFixed(4);
+						break;
+					default:
+						formattedValue = value;
+				}
+				row.push(formattedValue);
+			} else {
+				row.push("N/A");
+			}
+		}
+
+		markdown += `| ${row.join(" | ")} |\n`;
+	}
+
+	// Save combined table
+	fs.writeFileSync("assets/comparison-table-all-pools.md", markdown);
 	console.log(
-		"Generated comparison CSV: assets/csv/oracle-comparison-table.csv",
+		"Generated combined comparison table: assets/comparison-table-all-pools.md",
 	);
 }
 
 // Run the generator
-generateComparisonTable();
+(function main() {
+	console.log("Generating comparison tables...\n");
+
+	// Generate separate tables for each pool type
+	const poolTypes = ["cryptoswap", "stableswap"];
+	for (const poolType of poolTypes) {
+		console.log(`\nProcessing ${poolType} pools...`);
+		generateComparisonTable(poolType);
+	}
+
+	// Generate combined table
+	console.log("\nGenerating combined table...");
+	generateCombinedTable();
+
+	console.log("\nAll comparison tables generated!");
+})();

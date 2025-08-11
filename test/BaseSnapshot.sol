@@ -3,7 +3,6 @@ pragma solidity 0.8.28;
 
 import {Test} from "forge-std/Test.sol";
 import {Math} from "openzeppelin-contracts/contracts/utils/math/Math.sol";
-import {StakeDAOStableSwapOracle} from "src/stakedao/StakeDAOStableSwapOracle.sol";
 
 abstract contract BaseSnapshot is Test {
     uint256 private immutable BLOCKS_PER_INTERVAL;
@@ -36,6 +35,7 @@ abstract contract BaseSnapshot is Test {
         SDOracleConfig sdOracleConfig;
         string network;
         address curvePool;
+        address curvePoolToken; // optional, if the pool token is not the same as the pool itself
         string directory;
     }
 
@@ -113,6 +113,9 @@ abstract contract BaseSnapshot is Test {
     /// @notice Set the config object except the `oracles` array
     function _preDeploySetup() internal virtual {}
 
+    /// @notice Deploy the oracle implementations persistently
+    function _deployPersistently() internal virtual {}
+
     ///////////////////////////////////////////////////////////////
     // --- UTILS
     ///////////////////////////////////////////////////////////////
@@ -123,7 +126,11 @@ abstract contract BaseSnapshot is Test {
             try IOracle(oracle.addr).price() returns (uint256 price) {
                 // Downscale from 10^(36 + loanDec - collDec) to 1e18
                 uint256 loanDec = IERC20Metadata(config.sdOracleConfig.loanAsset).decimals(); // 6 for USDC
-                uint256 collDec = IERC20Metadata(config.curvePool).decimals(); // Get actual LP decimals
+
+                // Get LP token decimals from the correct address
+                address lpToken = config.curvePoolToken != address(0) ? config.curvePoolToken : config.curvePool;
+                uint256 collDec = IERC20Metadata(lpToken).decimals(); // Get actual LP decimals
+
                 uint256 downscaleExp = 18 + loanDec - collDec;
                 return downscaleExp == 0 ? price : price / (10 ** downscaleExp);
             } catch {
@@ -131,6 +138,7 @@ abstract contract BaseSnapshot is Test {
             }
         } else if (oracle.id == OracleID.CURVE) {
             uint256 _price = IOracle(oracle.addr).price();
+            if (config.sdOracleConfig.loanAssetFeed == address(0)) return _price;
 
             // Fetch the price of the loan asset in USD
             (, int256 answer,,,) = IFeed(config.sdOracleConfig.loanAssetFeed).latestRoundData();
@@ -147,43 +155,6 @@ abstract contract BaseSnapshot is Test {
         } else {
             revert("Invalid oracle ID");
         }
-    }
-
-    function _deployPersistently() internal virtual {
-        vm.startPrank(DEPLOYER); // non-persistent account (`msg.sender` is by default)
-
-        // Deploy the collateral token
-        address collateral = address(new MockCollateralToken(config.curvePool));
-        vm.makePersistent(collateral);
-
-        // Deploy Stake DAO Oracle implementation #1
-        address stakeDAOOracle = address(
-            new StakeDAOStableSwapOracle(
-                config.curvePool,
-                collateral,
-                config.sdOracleConfig.loanAsset,
-                config.sdOracleConfig.loanAssetFeed,
-                config.sdOracleConfig.loanAssetHeartbeat,
-                config.sdOracleConfig.poolAssetFeeds,
-                config.sdOracleConfig.poolAssetHeartbeats
-            )
-        );
-        vm.makePersistent(stakeDAOOracle);
-
-        // Deploy the coin0 Oracle implementation for the Curve Oracle
-        address coin0Oracle = address(new MockCurveOracle(config.sdOracleConfig.poolAssetFeeds[0]));
-        vm.makePersistent(coin0Oracle);
-
-        // Deploy the Curve Oracle implementation
-        address curveOracle = address(
-            deployCode("out/CurveLPOracleStable.vy/CurveLPOracleStable.json", abi.encode(config.curvePool, coin0Oracle))
-        );
-        vm.makePersistent(curveOracle);
-        vm.stopPrank();
-
-        // Push the oracles to the config structure
-        config.oracles.push(Oracles({addr: stakeDAOOracle, path: _filename("/sd-stable"), id: OracleID.STAKEDAO}));
-        config.oracles.push(Oracles({addr: curveOracle, path: _filename("/curve-stable"), id: OracleID.CURVE}));
     }
 
     function _filename(string memory key) internal view returns (string memory) {
@@ -212,17 +183,18 @@ abstract contract BaseSnapshot is Test {
 }
 
 contract MockCollateralToken {
-    address private immutable POOL_ADDRESS;
+    address private immutable POOL_TOKEN_ADDRESS;
 
     constructor(address poolAddress) {
-        POOL_ADDRESS = poolAddress;
+        POOL_TOKEN_ADDRESS = poolAddress;
     }
 
     function decimals() external view returns (uint8) {
-        return IERC20Metadata(POOL_ADDRESS).decimals();
+        return IERC20Metadata(POOL_TOKEN_ADDRESS).decimals();
     }
 }
 
+// Always return 18 decimals the price to the Curve Oracle
 contract MockCurveOracle {
     address private immutable WRAPPED_ORACLE;
 
@@ -265,4 +237,8 @@ interface IFeed {
         external
         view
         returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound);
+}
+
+interface ICurvePool {
+    function lp_token() external view returns (address);
 }

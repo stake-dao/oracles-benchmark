@@ -2,7 +2,9 @@
 
 Minimalistic benchmark for Curve oracles.
 
-## Oracle Comparison Summary
+## Stableswap Oracles
+
+### Oracle Comparison Summary
 
 | Metric                        | cbBTC/wBTC | ETH/stETH | USDC/USDT |
 | ----------------------------- | ---------- | --------- | --------- |
@@ -23,7 +25,7 @@ Minimalistic benchmark for Curve oracles.
 | StakeDAO Lower (%)            | 49.31%     | 52.84%    | 11.14%    |
 | Prices Equal (%)              | 0.55%      | 0.00%     | 77.44%    |
 
-### Interpretation Guide
+#### Interpretation Guide
 
 - **Correlation**: 1.0 = perfect correlation, 0.0 = no correlation
 - **Price Differences**: Lower is better (closer to Curve's oracle)
@@ -32,28 +34,96 @@ Minimalistic benchmark for Curve oracles.
 - **Information Ratio**: Positive = StakeDAO outperforms, Negative = Curve outperforms
 - **Relative Performance**: 50/50 split = no bias, higher % = systematic bias
 
-### Performance Summary
+#### Performance Summary
 
 - **Best Correlation**: ETHstETH (99.996%)
 - **Lowest Tracking Error**: USDCUSDT (0.000081)
 - **Most Balanced**: USDCUSDT (0.28% difference)
 
-## Stableswap Oracles
+### Data
 
-### cbBTC/wBTC
+#### cbBTC/wBTC
 
 The data are [here](./data/stableswap/cbBTCwBTC) and the CSV files are [here](./assets/csv).
 
 ![cbBTC/wBTC](./assets/screens/cbBTCwBTC.png)
 
-### ETH/stETH
+#### ETH/stETH
 
 The data are [here](./data/stableswap/ETHstETH) and the CSV files are [here](./assets/csv).
 
 ![ETH/stETH](./assets/screens/ETHstETH.png)
 
-### USDC/USDT
+#### USDC/USDT
 
 The data are [here](./data/stableswap/USDCUSDT) and the CSV files are [here](./assets/csv).
 
 ![USDC/USDT](./assets/screens/USDCUSDT.png)
+
+## Cryptoswap Oracles
+
+### Oracle Comparison Summary
+
+| Metric                        | GHOcbBTCETH | USDCwBTCETH | USDTwBTCETH |
+| ----------------------------- | ----------- | ----------- | ----------- |
+| Total Data Points             | 242         | 243         | 243         |
+| Correlation                   | 1.0000      | 1.0000      | 1.0000      |
+| Average Price Difference (%)  | 0.0000      | 0.0000      | 0.0000      |
+| Max Price Difference (%)      | 0.0000      | 0.0000      | 0.0000      |
+| Min Price Difference (%)      | 0.0000      | 0.0000      | 0.0000      |
+| Standard Deviation (Absolute) | 0.0000      | 0.0000      | 0.0000      |
+| Standard Deviation (%)        | 0.0000      | 0.0000      | 0.0000      |
+| Tracking Error                | 0.0000      | 0.0000      | 0.0000      |
+| StakeDAO Volatility (%)       | 239.27%     | 235.47%     | 237.57%     |
+| Curve Volatility (%)          | 239.27%     | 235.47%     | 237.57%     |
+| Information Ratio             | 0.0000      | 0.0000      | 0.0000      |
+| Max Drawdown (%)              | 10.36%      | 10.61%      | 10.24%      |
+| Median Absolute Deviation     | 0.0000      | 0.0000      | 0.0000      |
+| StakeDAO Higher (%)           | 0.00%       | 0.00%       | 0.00%       |
+| StakeDAO Lower (%)            | 0.00%       | 0.00%       | 0.00%       |
+| Prices Equal (%)              | 100.00%     | 100.00%     | 100.00%     |
+
+#### Interpretation Guide
+
+- **Correlation**: 1.0 = perfect correlation, 0.0 = no correlation
+- **Price Differences**: Lower is better (closer to Curve's oracle)
+- **Tracking Error**: Lower is better (more consistent with Curve)
+- **Volatility**: Lower is better (more stable pricing)
+- **Information Ratio**: Positive = StakeDAO outperforms, Negative = Curve outperforms
+- **Relative Performance**: 50/50 split = no bias, higher % = systematic bias
+
+#### Performance Summary
+
+- **Best Correlation**: USDTwBTCETH (100.000%)
+- **Lowest Tracking Error**: USDTwBTCETH (0.000000)
+- **Most Balanced**: USDTwBTCETH (0.00% difference)
+
+### Data
+
+#### GHO/cbBTC/ETH
+
+The data are [here](./data/cryptoswap/GHOcbBTCETH) and the CSV files are [here](./assets/csv).
+
+![GHO/cbBTC/ETH](./assets/screens/GHOcbBTCETH.png)
+
+#### USDC/wBTC/ETH
+
+The data are [here](./data/cryptoswap/USDCwBTCETH) and the CSV files are [here](./assets/csv).
+
+![USDC/wBTC/ETH](./assets/screens/USDCwBTCETH.png)
+
+#### USDT/wBTC/ETH
+
+The data are [here](./data/cryptoswap/USDTwBTCETH) and the CSV files are [here](./assets/csv).
+
+![USDT/wBTC/ETH](./assets/screens/USDTwBTCETH.png)
+
+## Oracle Comparison Summary - All Pools
+
+| Metric                  | cryptoswap-GHOcbBTCETH | cryptoswap-USDCwBTCETH | cryptoswap-USDTwBTCETH | stableswap-ETHstETH | stableswap-USDCUSDT | stableswap-cbBTCwBTC |
+| ----------------------- | ---------------------- | ---------------------- | ---------------------- | ------------------- | ------------------- | -------------------- |
+| Correlation             | 1.0000                 | 1.0000                 | 1.0000                 | 1.0000              | 0.9959              | 0.9991               |
+| Avg Price Diff (%)      | 0.0000                 | 0.0000                 | 0.0000                 | 0.0990              | 0.0001              | 0.2410               |
+| Tracking Error          | 0.0000                 | 0.0000                 | 0.0000                 | 6.7051              | 0.0001              | 507.8479             |
+| StakeDAO Volatility (%) | 239.27%                | 235.47%                | 237.57%                | 281.70%             | 0.74%               | 137.36%              |
+| StakeDAO Higher (%)     | 0.00%                  | 0.00%                  | 0.00%                  | 47.16%              | 11.42%              | 50.14%               |

@@ -1,0 +1,2 @@
+pool,pool_type,total_data_points,avg_price_diff,avg_price_diff_percent,max_price_diff,min_price_diff,max_price_diff_percent,min_price_diff_percent,std_dev_price_diff,std_dev_price_diff_percent,correlation,stakeDao_volatility,curve_volatility,tracking_error,max_drawdown,information_ratio,stakeDao_sharpe,median_absolute_deviation,stakeDao_higher_percent,stakeDao_lower_percent,stakeDao_equal_percent
+USDTwBTCETH,cryptoswap,243,0.000000,0.0000,0.000000,0.000000,0.0000,0.0000,0.000000,0.0000,1.000000,2.375689,2.375689,0.000000,0.102448,0.000000,0.000811,0.000000,0.00,0.00,100.00

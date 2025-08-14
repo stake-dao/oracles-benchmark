@@ -1,23 +1,23 @@
 # Oracle Comparison Summary - Stableswap Pools
 
-| Metric                        | ETHstETH | USDCUSDT | cbBTCwBTC |
-| ----------------------------- | -------- | -------- | --------- |
-| Total Data Points             | 362      | 364      | 363       |
-| Correlation                   | 1.0000   | 1.0000   | 1.0000    |
-| Average Price Difference (%)  | 0.0000   | 0.0000   | 0.0000    |
-| Max Price Difference (%)      | 0.0000   | 0.0000   | 0.0000    |
-| Min Price Difference (%)      | 0.0000   | 0.0000   | 0.0000    |
-| Standard Deviation (Absolute) | 0.0000   | 0.0000   | 0.0000    |
-| Standard Deviation (%)        | 0.0000   | 0.0000   | 0.0000    |
-| Tracking Error                | 0.0000   | 0.0000   | 0.0000    |
-| StakeDAO Volatility (%)       | 418.01%  | 1.02%    | 209.56%   |
-| Curve Volatility (%)          | 418.01%  | 1.02%    | 209.56%   |
-| Information Ratio             | 0.0000   | 0.0000   | 0.0000    |
-| Max Drawdown (%)              | 23.79%   | 0.06%    | 11.06%    |
-| Median Absolute Deviation     | 0.0000   | 0.0000   | 0.0000    |
-| StakeDAO Higher (%)           | 0.00%    | 0.00%    | 0.00%     |
-| StakeDAO Lower (%)            | 0.00%    | 0.00%    | 0.00%     |
-| Prices Equal (%)              | 100.00%  | 100.00%  | 100.00%   |
+| Metric                        | ETHstETH | USDCUSDT | cbBTCwBTC | yCRVCRV |
+| ----------------------------- | -------- | -------- | --------- | ------- |
+| Total Data Points             | 362      | 364      | 363       | 257     |
+| Correlation                   | 1.0000   | 1.0000   | 1.0000    | 1.0000  |
+| Average Price Difference (%)  | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| Max Price Difference (%)      | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| Min Price Difference (%)      | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| Standard Deviation (Absolute) | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| Standard Deviation (%)        | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| Tracking Error                | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| StakeDAO Volatility (%)       | 418.01%  | 1.02%    | 209.56%   | 93.69%  |
+| Curve Volatility (%)          | 418.01%  | 1.02%    | 209.56%   | 93.69%  |
+| Information Ratio             | 0.0000   | 0.0000   | 0.0000    | -0.0837 |
+| Max Drawdown (%)              | 23.79%   | 0.06%    | 11.06%    | 31.97%  |
+| Median Absolute Deviation     | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| StakeDAO Higher (%)           | 0.00%    | 0.00%    | 0.00%     | 0.78%   |
+| StakeDAO Lower (%)            | 0.00%    | 0.00%    | 0.00%     | 0.00%   |
+| Prices Equal (%)              | 100.00%  | 100.00%  | 100.00%   | 99.22%  |
 
 ## Interpretation Guide
 
@@ -30,6 +30,6 @@
 
 ## Performance Summary
 
-- **Best Correlation**: cbBTCwBTC (100.000%)
-- **Lowest Tracking Error**: cbBTCwBTC (0.000000)
+- **Best Correlation**: yCRVCRV (100.000%)
+- **Lowest Tracking Error**: yCRVCRV (0.000000)
 - **Most Balanced**: cbBTCwBTC (0.00% difference)

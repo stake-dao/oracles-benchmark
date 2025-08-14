@@ -4,28 +4,26 @@ Minimalistic benchmark for Curve oracles.
 
 ## Stableswap Oracles
 
-### Oracle Comparison Summary
+| Metric                        | ETHstETH | USDCUSDT | cbBTCwBTC | yCRVCRV |
+| ----------------------------- | -------- | -------- | --------- | ------- |
+| Total Data Points             | 362      | 364      | 363       | 257     |
+| Correlation                   | 1.0000   | 1.0000   | 1.0000    | 1.0000  |
+| Average Price Difference (%)  | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| Max Price Difference (%)      | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| Min Price Difference (%)      | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| Standard Deviation (Absolute) | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| Standard Deviation (%)        | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| Tracking Error                | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| StakeDAO Volatility (%)       | 418.01%  | 1.02%    | 209.56%   | 93.69%  |
+| Curve Volatility (%)          | 418.01%  | 1.02%    | 209.56%   | 93.69%  |
+| Information Ratio             | 0.0000   | 0.0000   | 0.0000    | -0.0837 |
+| Max Drawdown (%)              | 23.79%   | 0.06%    | 11.06%    | 31.97%  |
+| Median Absolute Deviation     | 0.0000   | 0.0000   | 0.0000    | 0.0000  |
+| StakeDAO Higher (%)           | 0.00%    | 0.00%    | 0.00%     | 0.78%   |
+| StakeDAO Lower (%)            | 0.00%    | 0.00%    | 0.00%     | 0.00%   |
+| Prices Equal (%)              | 100.00%  | 100.00%  | 100.00%   | 99.22%  |
 
-| Metric                        | ETHstETH | USDCUSDT | cbBTCwBTC |
-| ----------------------------- | -------- | -------- | --------- |
-| Total Data Points             | 362      | 364      | 363       |
-| Correlation                   | 1.0000   | 1.0000   | 1.0000    |
-| Average Price Difference (%)  | 0.0000   | 0.0000   | 0.0000    |
-| Max Price Difference (%)      | 0.0000   | 0.0000   | 0.0000    |
-| Min Price Difference (%)      | 0.0000   | 0.0000   | 0.0000    |
-| Standard Deviation (Absolute) | 0.0000   | 0.0000   | 0.0000    |
-| Standard Deviation (%)        | 0.0000   | 0.0000   | 0.0000    |
-| Tracking Error                | 0.0000   | 0.0000   | 0.0000    |
-| StakeDAO Volatility (%)       | 418.01%  | 1.02%    | 209.56%   |
-| Curve Volatility (%)          | 418.01%  | 1.02%    | 209.56%   |
-| Information Ratio             | 0.0000   | 0.0000   | 0.0000    |
-| Max Drawdown (%)              | 23.79%   | 0.06%    | 11.06%    |
-| Median Absolute Deviation     | 0.0000   | 0.0000   | 0.0000    |
-| StakeDAO Higher (%)           | 0.00%    | 0.00%    | 0.00%     |
-| StakeDAO Lower (%)            | 0.00%    | 0.00%    | 0.00%     |
-| Prices Equal (%)              | 100.00%  | 100.00%  | 100.00%   |
-
-#### Interpretation Guide
+## Interpretation Guide
 
 - **Correlation**: 1.0 = perfect correlation, 0.0 = no correlation
 - **Price Differences**: Lower is better (closer to Curve's oracle)
@@ -34,10 +32,10 @@ Minimalistic benchmark for Curve oracles.
 - **Information Ratio**: Positive = StakeDAO outperforms, Negative = Curve outperforms
 - **Relative Performance**: 50/50 split = no bias, higher % = systematic bias
 
-#### Performance Summary
+## Performance Summary
 
-- **Best Correlation**: cbBTCwBTC (100.000%)
-- **Lowest Tracking Error**: cbBTCwBTC (0.000000)
+- **Best Correlation**: yCRVCRV (100.000%)
+- **Lowest Tracking Error**: yCRVCRV (0.000000)
 - **Most Balanced**: cbBTCwBTC (0.00% difference)
 
 ### Data
@@ -59,6 +57,13 @@ The data are [here](./data/stableswap/ETHstETH) and the CSV files are [here](./a
 The data are [here](./data/stableswap/USDCUSDT) and the CSV files are [here](./assets/csv).
 
 ![USDC/USDT](./assets/screens/USDCUSDT.png)
+
+#### yCRV/CRV
+
+The data are [here](./data/stableswap/yCRVCRV) and the CSV files are [here](./assets/csv).
+This benchmark is focused on the yCRV/CRV pool depeg event that happened in December 2023.
+
+![yCRV/CRV](./assets/screens/yCRVCRV.png)
 
 ## Cryptoswap Oracles
 
@@ -120,10 +125,10 @@ The data are [here](./data/cryptoswap/USDTwBTCETH) and the CSV files are [here](
 
 ## Oracle Comparison Summary - All Pools
 
-| Metric                  | cryptoswap-GHOcbBTCETH | cryptoswap-USDCwBTCETH | cryptoswap-USDTwBTCETH | stableswap-ETHstETH | stableswap-USDCUSDT | stableswap-cbBTCwBTC |
-| ----------------------- | ---------------------- | ---------------------- | ---------------------- | ------------------- | ------------------- | -------------------- |
-| Correlation             | 1.0000                 | 1.0000                 | 1.0000                 | 1.0000              | 1.0000              | 1.0000               |
-| Avg Price Diff (%)      | 0.0000                 | 0.0000                 | 0.0000                 | 0.0000              | 0.0000              | 0.0000               |
-| Tracking Error          | 0.0000                 | 0.0000                 | 0.0000                 | 0.0000              | 0.0000              | 0.0000               |
-| StakeDAO Volatility (%) | 182.48%                | 189.98%                | 187.77%                | 418.01%             | 1.02%               | 209.56%              |
-| StakeDAO Higher (%)     | 0.00%                  | 0.00%                  | 0.00%                  | 0.00%               | 0.00%               | 0.00%                |
+| Metric                  | cryptoswap-GHOcbBTCETH | cryptoswap-USDCwBTCETH | cryptoswap-USDTwBTCETH | stableswap-ETHstETH | stableswap-USDCUSDT | stableswap-cbBTCwBTC | stableswap-yCRVCRV |
+| ----------------------- | ---------------------- | ---------------------- | ---------------------- | ------------------- | ------------------- | -------------------- | ------------------ |
+| Correlation             | 1.0000                 | 1.0000                 | 1.0000                 | 1.0000              | 1.0000              | 1.0000               | 1.0000             |
+| Avg Price Diff (%)      | 0.0000                 | 0.0000                 | 0.0000                 | 0.0000              | 0.0000              | 0.0000               | 0.0000             |
+| Tracking Error          | 0.0000                 | 0.0000                 | 0.0000                 | 0.0000              | 0.0000              | 0.0000               | 0.0000             |
+| StakeDAO Volatility (%) | 182.48%                | 189.98%                | 187.77%                | 418.01%             | 1.02%               | 209.56%              | 93.69%             |
+| StakeDAO Higher (%)     | 0.00%                  | 0.00%                  | 0.00%                  | 0.00%               | 0.00%               | 0.00%                | 0.78%              |

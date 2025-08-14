@@ -74,7 +74,7 @@ abstract contract BaseSnapshot is Test {
     {
         startBlock = 22_216_942; //Sat, Mon April 7, 12:12:11, 2025 UTC
         endBlock = 23_090_359; // Thu, 7 Aug 2025 16:25:11 +0000
-        blocksPerInterval = 1200; // ~4 hours
+        blocksPerInterval = 2400; // ~8 hours
 
         return (startBlock, endBlock, blocksPerInterval);
     }
@@ -95,8 +95,8 @@ abstract contract BaseSnapshot is Test {
             // Snapshot the prices returned by each oracle
             bool isLastSnapshot = currentBlock + BLOCKS_PER_INTERVAL > END_BLOCK;
             for (uint256 j; j < config.oracles.length; j++) {
-                uint256 price = _fetchPrice(config.oracles[j]);
-                vm.writeLine(config.oracles[j].path, _formatJSONData(price, currentBlock, isLastSnapshot));
+                (uint256 rawPrice, uint256 price) = _fetchPrice(config.oracles[j]);
+                vm.writeLine(config.oracles[j].path, _formatJSONData(rawPrice, price, currentBlock, isLastSnapshot));
             }
         }
 
@@ -121,7 +121,7 @@ abstract contract BaseSnapshot is Test {
     ///////////////////////////////////////////////////////////////
 
     /// @notice Fetch the price of the oracle, upscale/downscale it to 1e18 if needed and return it in loan asset unit
-    function _fetchPrice(Oracles memory oracle) internal view returns (uint256) {
+    function _fetchPrice(Oracles memory oracle) internal view returns (uint256, uint256) {
         if (oracle.id == OracleID.STAKEDAO) {
             try IOracle(oracle.addr).price() returns (uint256 price) {
                 // Downscale from 10^(36 + loanDec - collDec) to 1e18
@@ -132,26 +132,22 @@ abstract contract BaseSnapshot is Test {
                 uint256 collDec = IERC20Metadata(lpToken).decimals(); // Get actual LP decimals
 
                 uint256 downscaleExp = 18 + loanDec - collDec;
-                return downscaleExp == 0 ? price : price / (10 ** downscaleExp);
+                return (price, downscaleExp == 0 ? price : price / (10 ** downscaleExp));
             } catch {
-                return 0; // failure -- Incorrect price returned for this block
+                return (0, 0); // failure -- Incorrect price returned for this block
             }
         } else if (oracle.id == OracleID.CURVE) {
-            uint256 _price = IOracle(oracle.addr).price();
-            if (config.sdOracleConfig.loanAssetFeed == address(0)) return _price;
+            uint256 priceUsd1e18 = IOracle(oracle.addr).price(); // LP in USD, 1e18
+            if (config.sdOracleConfig.loanAssetFeed == address(0)) return (priceUsd1e18, priceUsd1e18);
 
-            // Fetch the price of the loan asset in USD
             (, int256 answer,,,) = IFeed(config.sdOracleConfig.loanAssetFeed).latestRoundData();
-            uint256 _answer = uint256(answer);
-            require(_answer > 0, "loan feed zero");
+            uint256 loanUsd = uint256(answer);
+            require(loanUsd > 0, "loan feed zero");
 
-            // Upscale/downscale the price of the loan asset to 1e18
-            uint256 loanAssetDecimals = IFeed(config.sdOracleConfig.loanAssetFeed).decimals();
-            if (loanAssetDecimals < 18) _answer = _answer * 10 ** (18 - loanAssetDecimals);
-            if (loanAssetDecimals > 18) _answer = _answer / 10 ** (loanAssetDecimals - 18);
-
-            // Return the price of the LP asset in loan asset unit (mostly USDC)
-            return Math.mulDiv(_price, 1e18, _answer);
+            uint256 loanFeedDec = IFeed(config.sdOracleConfig.loanAssetFeed).decimals();
+            // LP/Loan scaled to 1e18: floor(priceUsd1e18 * 10^loanFeedDec / loanUsd)
+            uint256 price = Math.mulDiv(priceUsd1e18, 10 ** loanFeedDec, loanUsd);
+            return (price, price);
         } else {
             revert("Invalid oracle ID");
         }
@@ -161,11 +157,14 @@ abstract contract BaseSnapshot is Test {
         return string.concat("data/", config.directory, "/", key, ".json");
     }
 
-    function _formatJSONData(uint256 price, uint256 currentBlock, bool isLastSnapshot)
+    function _formatJSONData(uint256 rawPrice, uint256 price, uint256 currentBlock, bool isLastSnapshot)
         internal
         view
         returns (string memory data)
     {
+        string memory rawPriceStr;
+        if (rawPrice != price) rawPriceStr = string.concat(",", '"raw_price":', vm.toString(rawPrice));
+
         data = string.concat(
             "{",
             '"block_number":',
@@ -176,6 +175,7 @@ abstract contract BaseSnapshot is Test {
             ",",
             '"price":',
             vm.toString(price),
+            rawPriceStr,
             "}",
             isLastSnapshot ? "" : ","
         );

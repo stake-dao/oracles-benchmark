@@ -1,17 +1,17 @@
 metric,ETHstETH,USDCUSDT,cbBTCwBTC
-Total Data Points,723,727,726
-Correlation,0.999961,0.995926,0.999117
-Average Price Difference (%),0.0990,0.0001,0.2410
-Max Price Difference (%),0.9947,0.0638,1.9831
-Min Price Difference (%),-0.3943,-0.0653,-0.1964
-Standard Deviation (Absolute),6.164099,0.000081,443.194266
-Standard Deviation (%),0.2179,0.0081,0.4272
-Tracking Error,6.705138,0.000081,507.847880
-StakeDAO Volatility (%),2.817048,0.007426,1.373635
-Curve Volatility (%),2.834783,0.007784,1.443098
-Information Ratio,0.393535,0.015425,0.488273
-Max Drawdown (%),0.236539,0.000311,0.108068
-Median Absolute Deviation,4.238029,0.000023,315.253231
-StakeDAO Higher (%),47.16,11.42,50.14
-StakeDAO Lower (%),52.84,11.14,49.31
-Prices Equal (%),0.00,77.44,0.55
+Total Data Points,362,364,363
+Correlation,1.000000,1.000000,1.000000
+Average Price Difference (%),0.0000,0.0000,0.0000
+Max Price Difference (%),0.0000,0.0000,0.0000
+Min Price Difference (%),0.0000,0.0000,0.0000
+Standard Deviation (Absolute),0.000000,0.000000,0.000000
+Standard Deviation (%),0.0000,0.0000,0.0000
+Tracking Error,0.000000,0.000000,0.000000
+StakeDAO Volatility (%),4.180092,0.010226,2.095603
+Curve Volatility (%),4.180092,0.010226,2.095603
+Information Ratio,0.000000,0.000000,0.000000
+Max Drawdown (%),0.237938,0.000633,0.110558
+Median Absolute Deviation,0.000000,0.000000,0.000000
+StakeDAO Higher (%),0.00,0.00,0.00
+StakeDAO Lower (%),0.00,0.00,0.00
+Prices Equal (%),100.00,100.00,100.00

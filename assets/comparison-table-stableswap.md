@@ -1,23 +1,23 @@
 # Oracle Comparison Summary - Stableswap Pools
 
-| Metric | ETHstETH | USDCUSDT | cbBTCwBTC |
-| -------- | -------- | -------- | --------- |
-| Total Data Points | 723 | 727 | 726 |
-| Correlation | 1.0000 | 0.9959 | 0.9991 |
-| Average Price Difference (%) | 0.0990 | 0.0001 | 0.2410 |
-| Max Price Difference (%) | 0.9947 | 0.0638 | 1.9831 |
-| Min Price Difference (%) | -0.3943 | -0.0653 | -0.1964 |
-| Standard Deviation (Absolute) | 6.1641 | 0.0001 | 443.1943 |
-| Standard Deviation (%) | 0.2179 | 0.0081 | 0.4272 |
-| Tracking Error | 6.7051 | 0.0001 | 507.8479 |
-| StakeDAO Volatility (%) | 281.70% | 0.74% | 137.36% |
-| Curve Volatility (%) | 283.48% | 0.78% | 144.31% |
-| Information Ratio | 0.3935 | 0.0154 | 0.4883 |
-| Max Drawdown (%) | 23.65% | 0.03% | 10.81% |
-| Median Absolute Deviation | 4.2380 | 0.0000 | 315.2532 |
-| StakeDAO Higher (%) | 47.16% | 11.42% | 50.14% |
-| StakeDAO Lower (%) | 52.84% | 11.14% | 49.31% |
-| Prices Equal (%) | 0.00% | 77.44% | 0.55% |
+| Metric                        | ETHstETH | USDCUSDT | cbBTCwBTC |
+| ----------------------------- | -------- | -------- | --------- |
+| Total Data Points             | 362      | 364      | 363       |
+| Correlation                   | 1.0000   | 1.0000   | 1.0000    |
+| Average Price Difference (%)  | 0.0000   | 0.0000   | 0.0000    |
+| Max Price Difference (%)      | 0.0000   | 0.0000   | 0.0000    |
+| Min Price Difference (%)      | 0.0000   | 0.0000   | 0.0000    |
+| Standard Deviation (Absolute) | 0.0000   | 0.0000   | 0.0000    |
+| Standard Deviation (%)        | 0.0000   | 0.0000   | 0.0000    |
+| Tracking Error                | 0.0000   | 0.0000   | 0.0000    |
+| StakeDAO Volatility (%)       | 418.01%  | 1.02%    | 209.56%   |
+| Curve Volatility (%)          | 418.01%  | 1.02%    | 209.56%   |
+| Information Ratio             | 0.0000   | 0.0000   | 0.0000    |
+| Max Drawdown (%)              | 23.79%   | 0.06%    | 11.06%    |
+| Median Absolute Deviation     | 0.0000   | 0.0000   | 0.0000    |
+| StakeDAO Higher (%)           | 0.00%    | 0.00%    | 0.00%     |
+| StakeDAO Lower (%)            | 0.00%    | 0.00%    | 0.00%     |
+| Prices Equal (%)              | 100.00%  | 100.00%  | 100.00%   |
 
 ## Interpretation Guide
 
@@ -30,6 +30,6 @@
 
 ## Performance Summary
 
-- **Best Correlation**: ETHstETH (99.996%)
-- **Lowest Tracking Error**: USDCUSDT (0.000081)
-- **Most Balanced**: USDCUSDT (0.28% difference)
+- **Best Correlation**: cbBTCwBTC (100.000%)
+- **Lowest Tracking Error**: cbBTCwBTC (0.000000)
+- **Most Balanced**: cbBTCwBTC (0.00% difference)

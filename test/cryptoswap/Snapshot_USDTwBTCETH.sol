@@ -19,15 +19,4 @@ contract Snapshot_USDTwBTCETH is CryptoSnapshot {
         config.sdOracleConfig.loanAssetFeed = 0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6; // USDC/USD
         config.sdOracleConfig.loanAssetHeartbeat = 1 days;
     }
-
-    function _getEnvironmentConfig()
-        internal
-        override
-        returns (uint256 startBlock, uint256 endBlock, uint256 blocksPerInterval)
-    {
-        (startBlock, endBlock, blocksPerInterval) = super._getEnvironmentConfig();
-        blocksPerInterval *= 3;
-
-        return (startBlock, endBlock, blocksPerInterval);
-    }
 }

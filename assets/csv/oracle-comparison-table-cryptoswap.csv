@@ -1,5 +1,5 @@
 metric,GHOcbBTCETH,USDCwBTCETH,USDTwBTCETH
-Total Data Points,242,243,243
+Total Data Points,362,364,363
 Correlation,1.000000,1.000000,1.000000
 Average Price Difference (%),0.0000,0.0000,0.0000
 Max Price Difference (%),0.0000,0.0000,0.0000
@@ -7,10 +7,10 @@ Min Price Difference (%),0.0000,0.0000,0.0000
 Standard Deviation (Absolute),0.000000,0.000000,0.000000
 Standard Deviation (%),0.0000,0.0000,0.0000
 Tracking Error,0.000000,0.000000,0.000000
-StakeDAO Volatility (%),2.392688,2.354748,2.375689
-Curve Volatility (%),2.392688,2.354748,2.375689
+StakeDAO Volatility (%),1.824832,1.899825,1.877679
+Curve Volatility (%),1.824832,1.899825,1.877679
 Information Ratio,0.000000,0.000000,0.000000
-Max Drawdown (%),0.103563,0.106088,0.102448
+Max Drawdown (%),0.111320,0.113392,0.110248
 Median Absolute Deviation,0.000000,0.000000,0.000000
 StakeDAO Higher (%),0.00,0.00,0.00
 StakeDAO Lower (%),0.00,0.00,0.00

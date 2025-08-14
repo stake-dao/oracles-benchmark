@@ -12,8 +12,6 @@ contract Snapshot_ETHstETH is StableSnapshot {
 
     function _preDeploySetup() internal override {
         config.sdOracleConfig.poolAssetFeeds.push(0x5147eA642CAEF7BD9c1265AadcA78f997AbB9649); // ETH/USD
-        config.sdOracleConfig.poolAssetFeeds.push(0xCfE54B5cD566aB89272946F602D76Ea879CAb4a8); // stETH/USD
-        config.sdOracleConfig.poolAssetHeartbeats.push(1 hours);
         config.sdOracleConfig.poolAssetHeartbeats.push(1 hours);
 
         config.sdOracleConfig.loanAsset = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48; // USDC

@@ -14,15 +14,4 @@ contract Snapshot_USDCwBTCETH is CryptoSnapshot {
         // coins0 is already the loan asset (USDC), so we don't have to set the pool asset feeds nor the loan asset feed
         config.sdOracleConfig.loanAsset = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48; // USDC
     }
-
-    function _getEnvironmentConfig()
-        internal
-        override
-        returns (uint256 startBlock, uint256 endBlock, uint256 blocksPerInterval)
-    {
-        (startBlock, endBlock, blocksPerInterval) = super._getEnvironmentConfig();
-        blocksPerInterval *= 3;
-
-        return (startBlock, endBlock, blocksPerInterval);
-    }
 }

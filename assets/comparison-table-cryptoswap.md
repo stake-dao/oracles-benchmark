@@ -1,23 +1,23 @@
 # Oracle Comparison Summary - Cryptoswap Pools
 
-| Metric | GHOcbBTCETH | USDCwBTCETH | USDTwBTCETH |
-| -------- | ----------- | ----------- | ----------- |
-| Total Data Points | 242 | 243 | 243 |
-| Correlation | 1.0000 | 1.0000 | 1.0000 |
-| Average Price Difference (%) | 0.0000 | 0.0000 | 0.0000 |
-| Max Price Difference (%) | 0.0000 | 0.0000 | 0.0000 |
-| Min Price Difference (%) | 0.0000 | 0.0000 | 0.0000 |
-| Standard Deviation (Absolute) | 0.0000 | 0.0000 | 0.0000 |
-| Standard Deviation (%) | 0.0000 | 0.0000 | 0.0000 |
-| Tracking Error | 0.0000 | 0.0000 | 0.0000 |
-| StakeDAO Volatility (%) | 239.27% | 235.47% | 237.57% |
-| Curve Volatility (%) | 239.27% | 235.47% | 237.57% |
-| Information Ratio | 0.0000 | 0.0000 | 0.0000 |
-| Max Drawdown (%) | 10.36% | 10.61% | 10.24% |
-| Median Absolute Deviation | 0.0000 | 0.0000 | 0.0000 |
-| StakeDAO Higher (%) | 0.00% | 0.00% | 0.00% |
-| StakeDAO Lower (%) | 0.00% | 0.00% | 0.00% |
-| Prices Equal (%) | 100.00% | 100.00% | 100.00% |
+| Metric                        | GHOcbBTCETH | USDCwBTCETH | USDTwBTCETH |
+| ----------------------------- | ----------- | ----------- | ----------- |
+| Total Data Points             | 362         | 364         | 363         |
+| Correlation                   | 1.0000      | 1.0000      | 1.0000      |
+| Average Price Difference (%)  | 0.0000      | 0.0000      | 0.0000      |
+| Max Price Difference (%)      | 0.0000      | 0.0000      | 0.0000      |
+| Min Price Difference (%)      | 0.0000      | 0.0000      | 0.0000      |
+| Standard Deviation (Absolute) | 0.0000      | 0.0000      | 0.0000      |
+| Standard Deviation (%)        | 0.0000      | 0.0000      | 0.0000      |
+| Tracking Error                | 0.0000      | 0.0000      | 0.0000      |
+| StakeDAO Volatility (%)       | 182.48%     | 189.98%     | 187.77%     |
+| Curve Volatility (%)          | 182.48%     | 189.98%     | 187.77%     |
+| Information Ratio             | 0.0000      | 0.0000      | 0.0000      |
+| Max Drawdown (%)              | 11.13%      | 11.34%      | 11.02%      |
+| Median Absolute Deviation     | 0.0000      | 0.0000      | 0.0000      |
+| StakeDAO Higher (%)           | 0.00%       | 0.00%       | 0.00%       |
+| StakeDAO Lower (%)            | 0.00%       | 0.00%       | 0.00%       |
+| Prices Equal (%)              | 100.00%     | 100.00%     | 100.00%     |
 
 ## Interpretation Guide
 

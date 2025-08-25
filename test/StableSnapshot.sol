@@ -30,22 +30,27 @@ abstract contract StableSnapshot is BaseSnapshot {
         vm.makePersistent(stakeDAOOracle);
 
         // Deploy the coin0 Oracle implementation for the Curve Oracle
-        address coin0Oracle = config.sdOracleConfig.poolAssetFeeds.length > 0
-            ? address(new MockCurveOracle(config.sdOracleConfig.poolAssetFeeds[0]))
-            : config.sdOracleConfig.loanAssetFeed != address(0)
-                ? address(new MockCurveOracle(config.sdOracleConfig.loanAssetFeed))
-                : address(0);
+        (address coin0Oracle, address curveOracle) = _deployCurveOracle();
         vm.makePersistent(coin0Oracle);
-
-        // Deploy the Curve Oracle implementation
-        address curveOracle = address(
-            deployCode("out/CurveLPOracleStable.vy/CurveLPOracleStable.json", abi.encode(config.curvePool, coin0Oracle))
-        );
         vm.makePersistent(curveOracle);
         vm.stopPrank();
 
         // Push the oracles to the config structure
         config.oracles.push(Oracles({addr: stakeDAOOracle, path: _filename("/sd-stableswap"), id: OracleID.STAKEDAO}));
         config.oracles.push(Oracles({addr: curveOracle, path: _filename("/curve-stableswap"), id: OracleID.CURVE}));
+    }
+
+    function _deployCurveOracle() internal virtual returns (address coin0Oracle, address curveOracle) {
+        // If needed, deploy the coin0 Oracle implementation for the Curve Oracle
+        coin0Oracle = config.sdOracleConfig.poolAssetFeeds.length > 0
+            ? address(new MockCurveOracle(config.sdOracleConfig.poolAssetFeeds[0]))
+            : config.sdOracleConfig.loanAssetFeed != address(0)
+                ? address(new MockCurveOracle(config.sdOracleConfig.loanAssetFeed))
+                : address(0);
+
+        // Deploy the Curve Oracle implementation
+        curveOracle = address(
+            deployCode("out/CurveLPOracleStable.vy/CurveLPOracleStable.json", abi.encode(config.curvePool, coin0Oracle))
+        );
     }
 }

@@ -3,21 +3,21 @@
 | Metric | ETHstETH | USDCUSDT | cbBTCwBTC | sUSDSUSDT | yCRVCRV |
 | -------- | -------- | -------- | --------- | --------- | ------- |
 | Total Data Points | 362 | 364 | 363 | 175 | 257 |
-| Correlation | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-| Average Price Difference (%) | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
-| Max Price Difference (%) | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
-| Min Price Difference (%) | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
-| Standard Deviation (Absolute) | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
-| Standard Deviation (%) | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
-| Tracking Error | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
-| StakeDAO Volatility (%) | 418.01% | 1.02% | 209.56% | 2.02% | 93.69% |
+| Correlation | 1.0000 | 1.0000 | 1.0000 | 0.9986 | 1.0000 |
+| Average Price Difference (%) | 0.0000 | 0.0000 | 0.0000 | 6.0596 | 0.0000 |
+| Max Price Difference (%) | 0.0000 | 0.0000 | 0.0000 | 6.4584 | 0.0000 |
+| Min Price Difference (%) | 0.0000 | 0.0000 | 0.0000 | 5.6679 | 0.0000 |
+| Standard Deviation (Absolute) | 0.0000 | 0.0000 | 0.0000 | 0.0025 | 0.0000 |
+| Standard Deviation (%) | 0.0000 | 0.0000 | 0.0000 | 0.2329 | 0.0000 |
+| Tracking Error | 0.0000 | 0.0000 | 0.0000 | 0.0613 | 0.0000 |
+| StakeDAO Volatility (%) | 418.01% | 1.02% | 209.56% | 1.55% | 93.69% |
 | Curve Volatility (%) | 418.01% | 1.02% | 209.56% | 2.02% | 93.69% |
-| Information Ratio | 0.0000 | 0.0000 | 0.0000 | 0.0000 | -0.0837 |
-| Max Drawdown (%) | 23.79% | 0.06% | 11.06% | 0.03% | 31.97% |
-| Median Absolute Deviation | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
-| StakeDAO Higher (%) | 0.00% | 0.00% | 0.00% | 0.00% | 0.78% |
-| StakeDAO Lower (%) | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% |
-| Prices Equal (%) | 100.00% | 100.00% | 100.00% | 100.00% | 99.22% |
+| Information Ratio | 0.0000 | 0.0000 | 0.0000 | 0.9992 | 0.0000 |
+| Max Drawdown (%) | 23.79% | 0.06% | 11.06% | 0.04% | 31.97% |
+| Median Absolute Deviation | 0.0000 | 0.0000 | 0.0000 | 0.0022 | 0.0000 |
+| StakeDAO Higher (%) | 0.00% | 0.00% | 0.00% | 0.00% | 0.00% |
+| StakeDAO Lower (%) | 0.00% | 0.00% | 0.00% | 100.00% | 0.00% |
+| Prices Equal (%) | 100.00% | 100.00% | 100.00% | 0.00% | 100.00% |
 
 ## Interpretation Guide
 
@@ -32,4 +32,4 @@
 
 - **Best Correlation**: yCRVCRV (100.000%)
 - **Lowest Tracking Error**: yCRVCRV (0.000000)
-- **Most Balanced**: sUSDSUSDT (0.00% difference)
+- **Most Balanced**: yCRVCRV (0.00% difference)

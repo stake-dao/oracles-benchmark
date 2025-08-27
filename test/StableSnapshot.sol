@@ -8,18 +8,10 @@ abstract contract StableSnapshot is BaseSnapshot {
     function _deployPersistently() internal override {
         vm.startPrank(DEPLOYER);
 
-        // Deploy the collateral token. Some pools handle the LP token as well. Some use a separate token.
-        // `curvePoolToken` is optional but must be set for pools that use a separate token.
-        address collateral = address(
-            new MockCollateralToken(config.curvePoolToken != address(0) ? config.curvePoolToken : config.curvePool)
-        );
-        vm.makePersistent(collateral);
-
         // Deploy Stake DAO Oracle implementation #1
         address stakeDAOOracle = address(
             new StakeDAOStableSwapOracle(
                 config.curvePool,
-                collateral,
                 config.sdOracleConfig.loanAsset,
                 config.sdOracleConfig.loanAssetFeed,
                 config.sdOracleConfig.loanAssetHeartbeat,

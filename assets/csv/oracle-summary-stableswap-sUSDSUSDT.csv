@@ -1,2 +1,2 @@
 pool,pool_type,total_data_points,avg_price_diff,avg_price_diff_percent,max_price_diff,min_price_diff,max_price_diff_percent,min_price_diff_percent,std_dev_price_diff,std_dev_price_diff_percent,correlation,stakeDao_volatility,curve_volatility,tracking_error,max_drawdown,information_ratio,stakeDao_sharpe,median_absolute_deviation,stakeDao_higher_percent,stakeDao_lower_percent,stakeDao_equal_percent
-sUSDSUSDT,stableswap,175,0.000000,0.0000,0.000000,0.000000,0.0000,0.0000,0.000000,0.0000,1.000000,0.020152,0.020152,0.000000,0.000350,0.000000,0.003709,0.000000,0.00,0.00,100.00
+sUSDSUSDT,stableswap,175,0.061253,6.0596,0.065453,0.057124,6.4584,5.6679,0.002461,0.2329,0.998605,0.015510,0.020152,0.061302,0.000435,0.999194,0.002058,0.002152,0.00,100.00,0.00

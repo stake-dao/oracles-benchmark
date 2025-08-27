@@ -7,7 +7,6 @@ import {CurveStableswapOracle} from
 contract StakeDAOStableSwapOracle is CurveStableswapOracle {
     constructor(
         address _curvePool,
-        address _collateralToken,
         address _loanAsset,
         address _loanAssetFeed,
         uint256 _loanAssetFeedHeartbeat,
@@ -16,7 +15,6 @@ contract StakeDAOStableSwapOracle is CurveStableswapOracle {
     )
         CurveStableswapOracle(
             _curvePool,
-            _collateralToken,
             _loanAsset,
             _loanAssetFeed,
             _loanAssetFeedHeartbeat,

@@ -182,18 +182,6 @@ abstract contract BaseSnapshot is Test {
     }
 }
 
-contract MockCollateralToken {
-    address private immutable POOL_TOKEN_ADDRESS;
-
-    constructor(address poolAddress) {
-        POOL_TOKEN_ADDRESS = poolAddress;
-    }
-
-    function decimals() external view returns (uint8) {
-        return IERC20Metadata(POOL_TOKEN_ADDRESS).decimals();
-    }
-}
-
 // Always return 18 decimals the price to the Curve Oracle
 contract MockCurveOracle {
     address private immutable WRAPPED_ORACLE;

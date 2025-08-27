@@ -35,8 +35,8 @@ contract Snapshot_sUSDSUSDT is StableSnapshot {
         returns (uint256 startBlock, uint256 endBlock, uint256 blocksPerInterval)
     {
         (startBlock, endBlock, blocksPerInterval) = super._getEnvironmentConfig();
-        endBlock = 23217703; // Mon Aug 25 11:03:59 2025 UTC
         startBlock = 22781035; // Wed Jun 25 11:03:59 2025 UTC
+        endBlock = 23217703; // Mon Aug 25 11:03:59 2025 UTC
     }
 
     // Aggregate the different source of prices into one for the Curve Oracle

@@ -6,7 +6,7 @@ solc = "0.8.28"
 
 optimizer = true
 optimizers_runs = 200
-fs_permissions = [{ access = "read-write", path = "./"}]
+fs_permissions = [{ access = "read-write", path = "./" }]
 
 [etherscan]
 mainnet = { key = "${ETHERSCAN_KEY}", chain = 1 }

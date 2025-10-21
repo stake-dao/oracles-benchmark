@@ -19,7 +19,8 @@ contract StakeDAOStableSwapOracle is CurveStableswapOracle {
             _loanAssetFeed,
             _loanAssetFeedHeartbeat,
             _poolAssetFeeds,
-            _poolAssetHeartbeats
+            _poolAssetHeartbeats,
+            36
         )
     {}
 }

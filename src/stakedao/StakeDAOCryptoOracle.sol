@@ -19,7 +19,8 @@ contract StakeDAOCryptoOracle is CurveCryptoswapOracle {
             _loanAssetFeed,
             _loanAssetHeartbeat,
             _token0ToUsdFeeds,
-            _token0ToUsdHeartbeats
+            _token0ToUsdHeartbeats,
+            36
         )
     {}
 }

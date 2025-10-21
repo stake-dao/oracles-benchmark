@@ -11,17 +11,11 @@ contract Snapshot_USDTcrvUSD is StableSnapshot {
     }
 
     function _preDeploySetup() internal override {
-        config.sdOracleConfig.poolAssetFeeds.push(
-            0x3E7d1eAB13ad0104d2750B8863b489D65364e32D
-        ); // USDT/USD
+        config.sdOracleConfig.poolAssetFeeds.push(0x3E7d1eAB13ad0104d2750B8863b489D65364e32D); // USDT/USD
         config.sdOracleConfig.poolAssetHeartbeats.push(1 days);
 
-        config
-            .sdOracleConfig
-            .loanAsset = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48; // USDC
-        config
-            .sdOracleConfig
-            .loanAssetFeed = 0x3E7d1eAB13ad0104d2750B8863b489D65364e32D; // USDC/USD
+        config.sdOracleConfig.loanAsset = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48; // USDC
+        config.sdOracleConfig.loanAssetFeed = 0x3E7d1eAB13ad0104d2750B8863b489D65364e32D; // USDC/USD
         config.sdOracleConfig.loanAssetHeartbeat = 1 days;
     }
 }

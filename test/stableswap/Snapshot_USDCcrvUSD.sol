@@ -12,8 +12,6 @@ contract Snapshot_USDCcrvUSD is StableSnapshot {
 
     function _preDeploySetup() internal override {
         // No need to set any feeds for this pool as coins0 is the loan asset
-        config
-            .sdOracleConfig
-            .loanAsset = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48; // USDC
+        config.sdOracleConfig.loanAsset = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48; // USDC
     }
 }

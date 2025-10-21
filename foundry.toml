@@ -5,7 +5,7 @@ libs = ["lib"]
 solc = "0.8.28"
 
 optimizer = true
-optimizers_runs = 200
+optimizer_runs = 200
 fs_permissions = [{ access = "read-write", path = "./" }]
 
 [etherscan]

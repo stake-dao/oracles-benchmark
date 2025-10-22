@@ -35,9 +35,9 @@ abstract contract StableSnapshot is BaseSnapshot {
     function _deployCurveOracle() internal virtual returns (address coin0Oracle, address curveOracle) {
         // If needed, deploy the coin0 Oracle implementation for the Curve Oracle
         coin0Oracle = config.sdOracleConfig.poolAssetFeeds.length > 0
-            ? address(new MockCurveOracle(config.sdOracleConfig.poolAssetFeeds[0]))
+            ? address(new MockCurvePriceFeed(config.sdOracleConfig.poolAssetFeeds[0]))
             : config.sdOracleConfig.loanAssetFeed != address(0)
-                ? address(new MockCurveOracle(config.sdOracleConfig.loanAssetFeed))
+                ? address(new MockCurvePriceFeed(config.sdOracleConfig.loanAssetFeed))
                 : address(0);
 
         // Deploy the Curve Oracle implementation

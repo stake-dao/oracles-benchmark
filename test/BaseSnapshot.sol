@@ -124,15 +124,11 @@ abstract contract BaseSnapshot is Test {
     function _fetchPrice(Oracles memory oracle) internal view returns (uint256, uint256) {
         if (oracle.id == OracleID.STAKEDAO) {
             try IOracle(oracle.addr).price() returns (uint256 price) {
-                // Downscale from 10^(36 + loanDec - collDec) to 1e18
-                uint256 loanDec = IERC20Metadata(config.sdOracleConfig.loanAsset).decimals(); // 6 for USDC
+                uint256 decimals = IOracle(oracle.addr).decimals();
 
-                // Get LP token decimals from the correct address
-                address lpToken = config.curvePoolToken != address(0) ? config.curvePoolToken : config.curvePool;
-                uint256 collDec = IERC20Metadata(lpToken).decimals(); // Get actual LP decimals
-
-                uint256 downscaleExp = 18 + loanDec - collDec;
-                return (price, downscaleExp == 0 ? price : price / (10 ** downscaleExp));
+                if (decimals < 18) return (price, price * 10 ** (18 - decimals));
+                else if (decimals > 18) return (price, price / 10 ** (decimals - 18));
+                else return (price, price);
             } catch {
                 return (0, 0); // failure -- Incorrect price returned for this block
             }
@@ -183,7 +179,7 @@ abstract contract BaseSnapshot is Test {
 }
 
 // Always return 18 decimals the price to the Curve Oracle
-contract MockCurveOracle {
+contract MockCurvePriceFeed {
     address private immutable WRAPPED_ORACLE;
 
     constructor(address wrappedOracle) {
@@ -217,6 +213,7 @@ interface IERC20Metadata {
 
 interface IOracle {
     function price() external view returns (uint256);
+    function decimals() external view returns (uint8);
 }
 
 interface IFeed {

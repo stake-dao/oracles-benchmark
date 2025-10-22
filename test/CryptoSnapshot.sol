@@ -23,9 +23,9 @@ abstract contract CryptoSnapshot is BaseSnapshot {
 
         // Deploy the coin0 Oracle implementation for the Curve Oracle
         address coin0Oracle = config.sdOracleConfig.poolAssetFeeds.length > 0
-            ? address(new MockCurveOracle(config.sdOracleConfig.poolAssetFeeds[0]))
+            ? address(new MockCurvePriceFeed(config.sdOracleConfig.poolAssetFeeds[0]))
             : config.sdOracleConfig.loanAssetFeed != address(0)
-                ? address(new MockCurveOracle(config.sdOracleConfig.loanAssetFeed))
+                ? address(new MockCurvePriceFeed(config.sdOracleConfig.loanAssetFeed))
                 : address(0);
         vm.makePersistent(coin0Oracle);
 

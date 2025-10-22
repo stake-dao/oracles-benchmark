@@ -1,6 +1,6 @@
 {
   "lib/contracts-monorepo": {
-    "rev": "da378c27fde086a86a2a779d36494c3099a8fb6c"
+    "rev": "cdeef6bbbe88d78845f3146c6817790a28b47e7e"
   },
   "lib/forge-std": {
     "rev": "8bbcf6e3f8f62f419e5429a0bd89331c85c37824"

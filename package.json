@@ -3,7 +3,8 @@
 	"version": "1.0.0",
 	"description": "Minimalistic benchmark for Curve oracles.",
 	"scripts": {
-		"generate-assets": "node script/implementations-benchmark/generate-charts.js && node script/implementations-benchmark/generate-csv.js && node script/implementations-benchmark/generate-comparison-table.js"
+		"implementations:assets": "node script/implementations-benchmark/generate-charts.js && node script/implementations-benchmark/generate-csv.js && node script/implementations-benchmark/generate-comparison-table.js",
+		"leg:assets": "node script/leg-sensitivity-benchmark/generate-charts.js && node script/leg-sensitivity-benchmark/generate-csv.js && node script/leg-sensitivity-benchmark/generate-comparison-table.js"
 	},
 	"author": "",
 	"license": "ISC"

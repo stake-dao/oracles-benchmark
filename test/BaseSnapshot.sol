@@ -13,7 +13,8 @@ abstract contract BaseSnapshot is Test {
     enum OracleID {
         NONE,
         CURVE,
-        STAKEDAO
+        STAKEDAO,
+        STAKEDAO_V2
     }
 
     struct Oracles {
@@ -83,7 +84,7 @@ abstract contract BaseSnapshot is Test {
     // --- TEST
     ///////////////////////////////////////////////////////////////
 
-    function test_oracle() external {
+    function test_fork_benchmarkOracle() external {
         for (uint256 i; i < config.oracles.length; i++) {
             vm.writeLine(config.oracles[i].path, "[");
         }
@@ -122,7 +123,7 @@ abstract contract BaseSnapshot is Test {
 
     /// @notice Fetch the price of the oracle, upscale/downscale it to 1e18 if needed and return it in loan asset unit
     function _fetchPrice(Oracles memory oracle) internal view returns (uint256, uint256) {
-        if (oracle.id == OracleID.STAKEDAO) {
+        if (oracle.id == OracleID.STAKEDAO || oracle.id == OracleID.STAKEDAO_V2) {
             try IOracle(oracle.addr).price() returns (uint256 price) {
                 uint256 decimals = IOracle(oracle.addr).decimals();
 

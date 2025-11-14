@@ -3,6 +3,7 @@ pragma solidity 0.8.28;
 
 import "test/BaseSnapshot.sol";
 import {StakeDAOStableSwapOracle} from "src/stakedao/StakeDAOStableSwapOracle.sol";
+import {StakeDAOStableSwapOracleV2} from "src/stakedao/StakeDAOStableSwapOracleV2.sol";
 
 abstract contract StableSnapshot is BaseSnapshot {
     function _deployPersistently() internal override {
@@ -16,10 +17,26 @@ abstract contract StableSnapshot is BaseSnapshot {
                 config.sdOracleConfig.loanAssetFeed,
                 config.sdOracleConfig.loanAssetHeartbeat,
                 config.sdOracleConfig.poolAssetFeeds,
-                config.sdOracleConfig.poolAssetHeartbeats
+                config.sdOracleConfig.poolAssetHeartbeats,
+                36
             )
         );
         vm.makePersistent(stakeDAOOracle);
+
+        // Deploy Stake DAO Oracle implementation #2
+        address stakeDAOOracleV2 = address(
+            new StakeDAOStableSwapOracleV2(
+                config.curvePool,
+                config.sdOracleConfig.loanAsset,
+                config.sdOracleConfig.loanAssetFeed,
+                config.sdOracleConfig.loanAssetHeartbeat,
+                config.sdOracleConfig.poolAssetFeeds,
+                config.sdOracleConfig.poolAssetHeartbeats,
+                36,
+                0
+            )
+        );
+        vm.makePersistent(stakeDAOOracleV2);
 
         // Deploy the coin0 Oracle implementation for the Curve Oracle
         (address coin0Oracle, address curveOracle) = _deployCurveOracle();
@@ -29,6 +46,8 @@ abstract contract StableSnapshot is BaseSnapshot {
 
         // Push the oracles to the config structure
         config.oracles.push(Oracles({addr: stakeDAOOracle, path: _filename("/sd-stableswap"), id: OracleID.STAKEDAO}));
+        config.oracles
+            .push(Oracles({addr: stakeDAOOracleV2, path: _filename("/sd-stableswap-v2"), id: OracleID.STAKEDAO_V2}));
         config.oracles.push(Oracles({addr: curveOracle, path: _filename("/curve-stableswap"), id: OracleID.CURVE}));
     }
 

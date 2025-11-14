@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.28;
 
-import {
-    CurveCryptoswapOracle
-} from "contracts-monorepo/packages/strategies/src/integrations/curve/oracles/CurveCryptoswapOracle.sol";
+import {CurveCryptoswapOracle} from "@periphery/src/lending/oracles/CurveCryptoswapOracle.sol";
 
 contract StakeDAOCryptoOracle is CurveCryptoswapOracle {
     constructor(
@@ -12,10 +10,17 @@ contract StakeDAOCryptoOracle is CurveCryptoswapOracle {
         address _loanAssetFeed,
         uint256 _loanAssetHeartbeat,
         address[] memory _token0ToUsdFeeds,
-        uint256[] memory _token0ToUsdHeartbeats
+        uint256[] memory _token0ToUsdHeartbeats,
+        uint256 _scalingExponent
     )
         CurveCryptoswapOracle(
-            _curvePool, _loanAsset, _loanAssetFeed, _loanAssetHeartbeat, _token0ToUsdFeeds, _token0ToUsdHeartbeats, 36
+            _curvePool,
+            _loanAsset,
+            _loanAssetFeed,
+            _loanAssetHeartbeat,
+            _token0ToUsdFeeds,
+            _token0ToUsdHeartbeats,
+            _scalingExponent
         )
     {}
 }

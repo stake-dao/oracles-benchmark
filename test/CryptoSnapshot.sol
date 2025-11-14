@@ -16,7 +16,8 @@ abstract contract CryptoSnapshot is BaseSnapshot {
                 config.sdOracleConfig.loanAssetFeed,
                 config.sdOracleConfig.loanAssetHeartbeat,
                 config.sdOracleConfig.poolAssetFeeds,
-                config.sdOracleConfig.poolAssetHeartbeats
+                config.sdOracleConfig.poolAssetHeartbeats,
+                36
             )
         );
         vm.makePersistent(stakeDAOOracle);

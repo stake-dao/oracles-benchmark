@@ -1,17 +1,33 @@
 metric,GHOcbBTCETH,USDCwBTCETH,USDTwBTCETH
-Total Data Points,362,364,363
-Correlation,1.000000,1.000000,1.000000
-Average Price Difference (%),0.0000,0.0000,0.0000
-Max Price Difference (%),0.0000,0.0000,0.0000
-Min Price Difference (%),0.0000,0.0000,0.0000
-Standard Deviation (Absolute),0.000000,0.000000,0.000000
-Standard Deviation (%),0.0000,0.0000,0.0000
-Tracking Error,0.000000,0.000000,0.000000
-StakeDAO Volatility (%),1.824832,1.899825,1.877679
-Curve Volatility (%),1.824832,1.899825,1.877679
-Information Ratio,0.000000,0.000000,0.000000
-Max Drawdown (%),0.111320,0.113392,0.110248
-Median Absolute Deviation,0.000000,0.000000,0.000000
-StakeDAO Higher (%),0.00,0.00,0.00
-StakeDAO Lower (%),0.00,0.00,0.00
-Prices Equal (%),100.00,100.00,100.00
+Total Data Points (v1),362,364,363
+Total Data Points (v2),N/A,N/A,N/A
+Correlation (v1),1.000000,1.000000,1.000000
+Correlation (v2),N/A,N/A,N/A
+Average Price Difference (%) (v1),0.0000,0.0000,0.0000
+Average Price Difference (%) (v2),N/A,N/A,N/A
+Max Price Difference (%) (v1),0.0000,0.0000,0.0000
+Max Price Difference (%) (v2),N/A,N/A,N/A
+Min Price Difference (%) (v1),0.0000,0.0000,0.0000
+Min Price Difference (%) (v2),N/A,N/A,N/A
+Standard Deviation (Absolute) (v1),0.000000,0.000000,0.000000
+Standard Deviation (Absolute) (v2),N/A,N/A,N/A
+Standard Deviation (%) (v1),0.0000,0.0000,0.0000
+Standard Deviation (%) (v2),N/A,N/A,N/A
+Tracking Error (v1),0.000000,0.000000,0.000000
+Tracking Error (v2),N/A,N/A,N/A
+StakeDAO Volatility (%) (v1),1.824832,1.899825,1.877679
+StakeDAO Volatility (%) (v2),N/A,N/A,N/A
+Curve Volatility (%) (v1),1.824832,1.899825,1.877679
+Curve Volatility (%) (v2),N/A,N/A,N/A
+Information Ratio (v1),0.000000,0.000000,0.000000
+Information Ratio (v2),N/A,N/A,N/A
+Max Drawdown (%) (v1),0.111320,0.113392,0.110248
+Max Drawdown (%) (v2),N/A,N/A,N/A
+Median Absolute Deviation (v1),0.000000,0.000000,0.000000
+Median Absolute Deviation (v2),N/A,N/A,N/A
+StakeDAO Higher (%) (v1),0.00,0.00,0.00
+StakeDAO Higher (%) (v2),N/A,N/A,N/A
+StakeDAO Lower (%) (v1),0.00,0.00,0.00
+StakeDAO Lower (%) (v2),N/A,N/A,N/A
+Prices Equal (%) (v1),100.00,100.00,100.00
+Prices Equal (%) (v2),N/A,N/A,N/A

@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.28;
 
-import {StableSnapshot} from "test/StableSnapshot.sol";
+import {StableSnapshot} from "test/implementations-benchmark/StableSnapshot.sol";
 
 contract Snapshot_yCRVCRV is StableSnapshot {
     constructor() StableSnapshot() {
         config.network = "mainnet";
         config.curvePool = 0x99f5aCc8EC2Da2BC0771c32814EFF52b712de1E5; // yCRV/CRV
-        config.directory = "stableswap/yCRVCRV";
+        config.directory = "implementations-benchmark/stableswap/yCRVCRV";
     }
 
     function _preDeploySetup() internal override {

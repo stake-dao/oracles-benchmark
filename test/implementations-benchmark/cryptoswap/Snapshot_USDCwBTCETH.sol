@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.28;
 
-import {CryptoSnapshot} from "test/CryptoSnapshot.sol";
+import {CryptoSnapshot} from "test/implementations-benchmark/CryptoSnapshot.sol";
 
 contract Snapshot_USDCwBTCETH is CryptoSnapshot {
     constructor() CryptoSnapshot() {

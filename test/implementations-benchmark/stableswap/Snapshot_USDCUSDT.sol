@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.28;
 
-import {StableSnapshot} from "test/StableSnapshot.sol";
+import {StableSnapshot} from "test/implementations-benchmark/StableSnapshot.sol";
 
-contract Snapshot_USDCUSDf is StableSnapshot {
+contract Snapshot_USDCUSDT is StableSnapshot {
     constructor() StableSnapshot() {
         config.network = "mainnet";
-        config.curvePool = 0x72310DAAed61321b02B08A547150c07522c6a976; // USDC/USDf
-        config.directory = "stableswap/USDCUSDf";
+        config.curvePool = 0x4f493B7dE8aAC7d55F71853688b1F7C8F0243C85; // USDC/USDT
+        config.directory = "implementations-benchmark/stableswap/USDCUSDT";
     }
 
     function _preDeploySetup() internal override {

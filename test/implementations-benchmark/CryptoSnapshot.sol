@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.28;
 
-import "test/BaseSnapshot.sol";
+import "test/implementations-benchmark/BaseSnapshot.sol";
 import {StakeDAOCryptoOracle} from "src/stakedao/StakeDAOCryptoOracle.sol";
 
 abstract contract CryptoSnapshot is BaseSnapshot {

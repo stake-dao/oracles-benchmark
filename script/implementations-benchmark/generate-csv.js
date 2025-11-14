@@ -395,7 +395,7 @@ function generateSummaryCSV(
 	const summaryCsv = `${headers.join(",")}\n${values.join(",")}\n`;
 
 	// Ensure directory exists
-	const dir = "assets/csv";
+	const dir = "assets/implementations-benchmark/csv";
 	if (!fs.existsSync(dir)) {
 		fs.mkdirSync(dir, { recursive: true });
 	}
@@ -476,7 +476,7 @@ function processPool(poolName, poolType) {
 	const poolTypes = ["cryptoswap", "stableswap"];
 
 	// Ensure assets/csv directory exists
-	const csvDir = "assets/csv";
+	const csvDir = "assets/implementations-benchmark/csv";
 	if (!fs.existsSync(csvDir)) {
 		fs.mkdirSync(csvDir, { recursive: true });
 	}
@@ -490,7 +490,7 @@ function processPool(poolName, poolType) {
 		}
 	}
 
-	console.log("\nCSV files generated in assets/csv/");
+	console.log("\nCSV files generated in assets/implementations-benchmark/csv/");
 	console.log(
 		"- oracle-comparison-{poolType}-{pool}.csv: Detailed comparison data",
 	);

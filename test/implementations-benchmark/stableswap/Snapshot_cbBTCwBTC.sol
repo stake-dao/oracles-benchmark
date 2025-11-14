@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.28;
 
-import {StableSnapshot} from "test/StableSnapshot.sol";
+import {StableSnapshot} from "test/implementations-benchmark/StableSnapshot.sol";
 
-contract Snapshot_CRVsdCRV is StableSnapshot {
+contract Snapshot_cbBTCwBTC is StableSnapshot {
     constructor() StableSnapshot() {
         config.network = "mainnet";
-        config.curvePool = 0xCA0253A98D16e9C1e3614caFDA19318EE69772D0; // CRV/sdCRV
-        config.directory = "stableswap/CRVsdCRV";
+        config.curvePool = 0x839d6bDeDFF886404A6d7a788ef241e4e28F4802; // cbBTC/wBTC
+        config.directory = "implementations-benchmark/stableswap/cbBTCwBTC";
     }
 
     function _preDeploySetup() internal override {
-        config.sdOracleConfig.poolAssetFeeds.push(0xCd627aA160A6fA45Eb793D19Ef54f5062F20f33f); // CRV/USD
+        config.sdOracleConfig.poolAssetFeeds.push(0x2665701293fCbEB223D11A08D826563EDcCE423A); // cBTC/USD
         config.sdOracleConfig.poolAssetHeartbeats.push(1 days);
 
         config.sdOracleConfig.loanAsset = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48; // USDC

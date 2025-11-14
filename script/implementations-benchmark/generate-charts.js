@@ -180,7 +180,7 @@ function processPool(poolName, poolType) {
 	const poolTypes = ["cryptoswap", "stableswap"];
 
 	// Ensure assets/charts directory exists
-	const chartsDir = "assets/charts";
+	const chartsDir = "assets/implementations-benchmark/charts";
 	if (!fs.existsSync(chartsDir)) {
 		fs.mkdirSync(chartsDir, { recursive: true });
 	}

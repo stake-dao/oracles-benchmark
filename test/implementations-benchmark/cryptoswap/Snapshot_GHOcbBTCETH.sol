@@ -1,17 +1,18 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.28;
 
-import {StableSnapshot} from "test/StableSnapshot.sol";
+import {CryptoSnapshot} from "test/implementations-benchmark/CryptoSnapshot.sol";
 
-contract Snapshot_cbBTCwBTC is StableSnapshot {
-    constructor() StableSnapshot() {
+contract Snapshot_GHOcbBTCETH is CryptoSnapshot {
+    constructor() CryptoSnapshot() {
         config.network = "mainnet";
-        config.curvePool = 0x839d6bDeDFF886404A6d7a788ef241e4e28F4802; // cbBTC/wBTC
-        config.directory = "stableswap/cbBTCwBTC";
+        config.curvePool = 0x8a4f252812dFF2A8636E4F7EB249d8FC2E3bd77f; // GHO/cbBTC/ETH
+        config.directory = "cryptoswap/GHOcbBTCETH";
     }
 
     function _preDeploySetup() internal override {
-        config.sdOracleConfig.poolAssetFeeds.push(0x2665701293fCbEB223D11A08D826563EDcCE423A); // cBTC/USD
+        // GHO is coins0
+        config.sdOracleConfig.poolAssetFeeds.push(0x3f12643D3f6f874d39C2a4c9f2Cd6f2DbAC877FC); // GHO/USD
         config.sdOracleConfig.poolAssetHeartbeats.push(1 days);
 
         config.sdOracleConfig.loanAsset = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48; // USDC

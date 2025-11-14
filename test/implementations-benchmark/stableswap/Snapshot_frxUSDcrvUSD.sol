@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.28;
 
-import {StableSnapshot} from "test/StableSnapshot.sol";
+import {StableSnapshot} from "test/implementations-benchmark/StableSnapshot.sol";
 
 contract Snapshot_frxUSDcrvUSD is StableSnapshot {
     constructor() StableSnapshot() {
         config.network = "mainnet";
         config.curvePool = 0x13e12BB0E6A2f1A3d6901a59a9d585e89A6243e1; // frxUSD/crvUSD
-        config.directory = "stableswap/frxUSDcrvUSD";
+        config.directory = "implementations-benchmark/stableswap/frxUSDcrvUSD";
 
         vm.label(config.curvePool, "CurvePool");
     }

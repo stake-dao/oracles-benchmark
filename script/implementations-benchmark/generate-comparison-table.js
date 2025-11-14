@@ -448,9 +448,9 @@ function generateCombinedTable() {
 	}
 
 	// Save combined table
-	fs.writeFileSync("assets/comparison-table-all-pools.md", markdown);
+	fs.writeFileSync("assets/implementations-benchmark/comparison-table-all-pools.md", markdown);
 	console.log(
-		"Generated combined comparison table: assets/comparison-table-all-pools.md",
+		"Generated combined comparison table: assets/implementations-benchmark/comparison-table-all-pools.md",
 	);
 }
 

@@ -1,2 +1,4 @@
 @openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
 @address-book/=lib/contracts-monorepo/packages/address-book
+@strategies/=lib/contracts-monorepo/packages/strategies
+@periphery/=lib/contracts-monorepo/packages/periphery

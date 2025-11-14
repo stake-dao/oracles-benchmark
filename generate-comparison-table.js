@@ -12,6 +12,15 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
+function parseNumber(value) {
+	if (value === undefined || value === null) return null;
+	const normalized =
+		typeof value === "string" ? value.trim() : `${value ?? ""}`.trim();
+	if (normalized === "") return null;
+	const num = Number.parseFloat(normalized);
+	return Number.isNaN(num) ? null : num;
+}
+
 function loadSummaryData(poolName, poolType) {
 	const filePath = `assets/csv/oracle-summary-${poolType}-${poolName}.csv`;
 	const data = fs.readFileSync(filePath, "utf8");
@@ -21,7 +30,8 @@ function loadSummaryData(poolName, poolType) {
 
 	const result = {};
 	headers.forEach((header, index) => {
-		result[header.trim()] = values[index];
+		const value = values[index] ?? "";
+		result[header.trim()] = value.trim();
 	});
 
 	return result;
@@ -71,8 +81,7 @@ function generateComparisonTable(poolType) {
 		}
 	}
 
-	// Define metrics with their display names and formatting
-	const metrics = [
+	const baseMetrics = [
 		{ key: "total_data_points", name: "Total Data Points", format: "integer" },
 		{ key: "correlation", name: "Correlation", format: "decimal" },
 		{
@@ -135,6 +144,22 @@ function generateComparisonTable(poolType) {
 		},
 	];
 
+	const metricVersions = [
+		{ suffix: "", label: "(v1)" },
+		{ suffix: "_v2", label: "(v2)" },
+	];
+
+	const metrics = [];
+	for (const baseMetric of baseMetrics) {
+		for (const version of metricVersions) {
+			metrics.push({
+				key: `${baseMetric.key}${version.suffix}`,
+				name: `${baseMetric.name} ${version.label}`.trim(),
+				format: baseMetric.format,
+			});
+		}
+	}
+
 	// Generate markdown table
 	let markdown = `# Oracle Comparison Summary - ${poolType.charAt(0).toUpperCase() + poolType.slice(1)} Pools\n\n`;
 
@@ -156,9 +181,9 @@ function generateComparisonTable(poolType) {
 		const row = [metric.name];
 
 		for (const pool of pools) {
-			const value = poolData[pool][metric.key];
-			if (value !== undefined) {
-				const numValue = Number.parseFloat(value);
+			const rawValue = poolData[pool][metric.key];
+			const numValue = parseNumber(rawValue);
+			if (numValue !== null) {
 				let formattedValue;
 
 				switch (metric.format) {
@@ -177,7 +202,7 @@ function generateComparisonTable(poolType) {
 						formattedValue = numValue.toFixed(4);
 						break;
 					default:
-						formattedValue = value;
+						formattedValue = rawValue ?? "N/A";
 				}
 
 				row.push(formattedValue);
@@ -202,40 +227,89 @@ function generateComparisonTable(poolType) {
 		"- **Information Ratio**: Positive = StakeDAO outperforms, Negative = Curve outperforms\n";
 	markdown +=
 		"- **Relative Performance**: 50/50 split = no bias, higher % = systematic bias\n\n";
+	markdown +=
+		"- **Version Labels**: Metrics marked (v1) or (v2) correspond to the respective StakeDAO oracle generation compared against Curve\n\n";
 
 	// Add performance summary
 	markdown += "## Performance Summary\n\n";
 
-	// Best correlation
-	const correlations = pools.map((pool) => ({
-		pool,
-		value: Number.parseFloat(poolData[pool].correlation),
-	}));
-	const bestCorrelation = correlations.reduce((a, b) =>
-		a.value > b.value ? a : b,
-	);
-	markdown += `- **Best Correlation**: ${bestCorrelation.pool} (${(bestCorrelation.value * 100).toFixed(3)}%)\n`;
+	const performanceMetrics = [
+		{
+			key: "correlation",
+			label: "Best Correlation (v1)",
+			comparator: (a, b) => (a.value > b.value ? a : b),
+			formatter: (entry) => `${(entry.value * 100).toFixed(3)}%`,
+		},
+		{
+			key: "correlation_v2",
+			label: "Best Correlation (v2)",
+			comparator: (a, b) => (a.value > b.value ? a : b),
+			formatter: (entry) => `${(entry.value * 100).toFixed(3)}%`,
+		},
+		{
+			key: "tracking_error",
+			label: "Lowest Tracking Error (v1)",
+			comparator: (a, b) => (a.value < b.value ? a : b),
+			formatter: (entry) => entry.value.toFixed(6),
+		},
+		{
+			key: "tracking_error_v2",
+			label: "Lowest Tracking Error (v2)",
+			comparator: (a, b) => (a.value < b.value ? a : b),
+			formatter: (entry) => entry.value.toFixed(6),
+		},
+	];
 
-	// Lowest tracking error
-	const trackingErrors = pools.map((pool) => ({
-		pool,
-		value: Number.parseFloat(poolData[pool].tracking_error),
-	}));
-	const lowestTrackingError = trackingErrors.reduce((a, b) =>
-		a.value < b.value ? a : b,
-	);
-	markdown += `- **Lowest Tracking Error**: ${lowestTrackingError.pool} (${lowestTrackingError.value.toFixed(6)})\n`;
+	for (const metric of performanceMetrics) {
+		const values = pools
+			.map((pool) => ({
+				pool,
+				value: parseNumber(poolData[pool][metric.key]),
+			}))
+			.filter((entry) => entry.value !== null);
 
-	// Most balanced performance
-	const balances = pools.map((pool) => {
-		const higher = Number.parseFloat(poolData[pool].stakeDao_higher_percent);
-		const lower = Number.parseFloat(poolData[pool].stakeDao_lower_percent);
-		return { pool, balance: Math.abs(higher - lower) };
-	});
-	const mostBalanced = balances.reduce((a, b) =>
-		a.balance < b.balance ? a : b,
-	);
-	markdown += `- **Most Balanced**: ${mostBalanced.pool} (${mostBalanced.balance.toFixed(2)}% difference)\n`;
+		if (values.length === 0) {
+			continue;
+		}
+
+		const bestEntry = values.reduce(metric.comparator);
+		markdown += `- **${metric.label}**: ${bestEntry.pool} (${metric.formatter(bestEntry)})\n`;
+	}
+
+	const balanceMetrics = [
+		{
+			higherKey: "stakeDao_higher_percent",
+			lowerKey: "stakeDao_lower_percent",
+			label: "Most Balanced (v1)",
+		},
+		{
+			higherKey: "stakeDao_higher_percent_v2",
+			lowerKey: "stakeDao_lower_percent_v2",
+			label: "Most Balanced (v2)",
+		},
+	];
+
+	for (const metric of balanceMetrics) {
+		const balances = pools
+			.map((pool) => {
+				const higher = parseNumber(poolData[pool][metric.higherKey]);
+				const lower = parseNumber(poolData[pool][metric.lowerKey]);
+				if (higher === null || lower === null) {
+					return null;
+				}
+				return { pool, balance: Math.abs(higher - lower) };
+			})
+			.filter((entry) => entry !== null);
+
+		if (balances.length === 0) {
+			continue;
+		}
+
+		const mostBalanced = balances.reduce((a, b) =>
+			a.balance < b.balance ? a : b,
+		);
+		markdown += `- **${metric.label}**: ${mostBalanced.pool} (${mostBalanced.balance.toFixed(2)}% difference)\n`;
+	}
 
 	// Save to file
 	const filename = `comparison-table-${poolType}.md`;
@@ -248,7 +322,7 @@ function generateComparisonTable(poolType) {
 		const row = [metric.name];
 		for (const pool of pools) {
 			const value = poolData[pool][metric.key];
-			row.push(value || "N/A");
+			row.push(value ? value : "N/A");
 		}
 		csv += `${row.join(",")}\n`;
 	}
@@ -290,7 +364,7 @@ function generateCombinedTable() {
 	}
 
 	// Define key metrics for combined table
-	const keyMetrics = [
+	const baseKeyMetrics = [
 		{ key: "correlation", name: "Correlation", format: "decimal" },
 		{
 			key: "avg_price_diff_percent",
@@ -309,6 +383,20 @@ function generateCombinedTable() {
 			format: "percentage",
 		},
 	];
+
+	const keyMetrics = [];
+	for (const metric of baseKeyMetrics) {
+		for (const version of [
+			{ suffix: "", label: "(v1)" },
+			{ suffix: "_v2", label: "(v2)" },
+		]) {
+			keyMetrics.push({
+				key: `${metric.key}${version.suffix}`,
+				name: `${metric.name} ${version.label}`.trim(),
+				format: metric.format,
+			});
+		}
+	}
 
 	// Generate combined markdown table
 	let markdown = "# Oracle Comparison Summary - All Pools\n\n";
@@ -331,9 +419,9 @@ function generateCombinedTable() {
 		const row = [metric.name];
 
 		for (const pool of allPools) {
-			const value = allPoolData[pool][metric.key];
-			if (value !== undefined) {
-				const numValue = Number.parseFloat(value);
+			const rawValue = allPoolData[pool][metric.key];
+			const numValue = parseNumber(rawValue);
+			if (numValue !== null) {
 				let formattedValue;
 
 				switch (metric.format) {
@@ -348,7 +436,7 @@ function generateCombinedTable() {
 						formattedValue = numValue.toFixed(4);
 						break;
 					default:
-						formattedValue = value;
+						formattedValue = rawValue ?? "N/A";
 				}
 				row.push(formattedValue);
 			} else {

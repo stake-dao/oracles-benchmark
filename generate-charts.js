@@ -11,7 +11,31 @@ function loadOracleData(filePath) {
 		}));
 }
 
-function generateChartHTML(stakeDaoData, curveData, poolName, poolType) {
+function generateChartHTML(stakeDaoData, curveData, stakeDaoV2Data, poolName, poolType) {
+	const datasets = [
+		{
+			label: "Curve Oracle",
+			data: curveData,
+			borderColor: "rgb(54, 162, 235)",
+			backgroundColor: "rgba(54, 162, 235, 0.1)",
+			tension: 0.1,
+		},
+		{
+			label: "StakeDAO Oracle v1",
+			data: stakeDaoData,
+			borderColor: "rgb(255, 99, 132)",
+			backgroundColor: "rgba(255, 99, 132, 0.1)",
+			tension: 0.1,
+		},
+		{
+			label: "StakeDAO Oracle v2",
+			data: stakeDaoV2Data,
+			borderColor: "rgb(75, 192, 192)",
+			backgroundColor: "rgba(75, 192, 192, 0.1)",
+			tension: 0.1,
+		}
+	];
+
 	const html = `
 <!DOCTYPE html>
 <html>
@@ -28,19 +52,7 @@ function generateChartHTML(stakeDaoData, curveData, poolName, poolType) {
         new Chart(ctx, {
             type: 'line',
             data: {
-                datasets: [{
-                    label: 'Curve Oracle',
-                    data: ${JSON.stringify(curveData)},
-                    borderColor: 'rgb(54, 162, 235)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                    tension: 0.1
-                },{
-                    label: 'StakeDAO Oracle',
-                    data: ${JSON.stringify(stakeDaoData)},
-                    borderColor: 'rgb(255, 99, 132)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.1)',
-                    tension: 0.1
-                }]
+                datasets: ${JSON.stringify(datasets)}
             },
             options: {
                 responsive: true,
@@ -128,6 +140,7 @@ function processPool(poolName, poolType) {
 	// Define file paths based on pool type
 	const curveFile = path.join(poolPath, `curve-${poolType}.json`);
 	const sdFile = path.join(poolPath, `sd-${poolType}.json`);
+	const sdV2File = path.join(poolPath, `sd-${poolType}-v2.json`);
 
 	// Check if both files exist
 	if (!fs.existsSync(curveFile)) {
@@ -145,8 +158,15 @@ function processPool(poolName, poolType) {
 	try {
 		const stakeDaoData = loadOracleData(sdFile);
 		const curveData = loadOracleData(curveFile);
+		const stakeDaoV2Data = loadOracleData(sdV2File)
 
-		generateChartHTML(stakeDaoData, curveData, poolName, poolType);
+		generateChartHTML(
+			stakeDaoData,
+			curveData,
+			stakeDaoV2Data,
+			poolName,
+			poolType,
+		);
 		console.log(`Generated chart for ${poolName} (${poolType})`);
 	} catch (error) {
 		console.error(

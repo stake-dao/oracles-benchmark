@@ -6,7 +6,7 @@ import {StakeDAOStableSwapOracle} from "src/stakedao/StakeDAOStableSwapOracle.so
 import {StakeDAOStableSwapOracleV2} from "src/stakedao/StakeDAOStableSwapOracleV2.sol";
 
 abstract contract StableSnapshot is BaseSnapshot {
-    function _deployPersistently() internal override {
+    function _deployPersistently() internal virtual override {
         vm.startPrank(DEPLOYER);
 
         // Deploy Stake DAO Oracle implementation #1
